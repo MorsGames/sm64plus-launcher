@@ -2,7 +2,11 @@
 
 This is the repository for the launcher for [SM64Plus](https://github.com/MorsGames/sm64plus), written using GameMaker 2022.2.
 
-## Yes, GameMaker
+Originally I intended to release the source code for it at SM64Plus's initial launch, but as I was working on the launcher the code for it started getting messier and messier, and I always told myself that I'd release it once I refactored it and made it more presentable.
+
+This never happened, so I'm releasing the code as is. There are a lot of improvements that can be made with it, but it gets the job done rather well.
+
+## Why GameMaker?
 
 I could build all the functionality of the launcher directly into the game, but I chose to go with GameMaker because for a few reasons:
 
@@ -10,7 +14,7 @@ I could build all the functionality of the launcher directly into the game, but 
 - Using C/C++ and building the launcher functionality directly into the game would take way too long, more than I could afford dedicating into a project like this.
 - Using something like MonoGame would still take longer, but it would also introduce .NET as a dependency.
 
-### Cons of GameMaker
+## Cons of GameMaker
 
 Using GameMaker paid off in the sense that it saved me a lot of time I would have wasted otherwise, but it also introduced a couple of problems.
 
@@ -25,10 +29,10 @@ All these issues (except the last) can be solved with a custom C/C++ extension, 
 
 As mentioned earlier, having a dependency on a marketplace extension prevents me from releasing a functional Linux version of the launcher. Once I solve that issue the Linux launcher will be available. This is also the reason why the Windows launcher is compiled for 32-bit.
 
-## How to Compile?
+## How to Compile
 
 - #### Step 1:
-    [Download and install GameMaker.](https://gamemaker.io/en)
+    [Download and install the latest version of GameMaker.](https://gamemaker.io/en)
 
 - #### Step 2:
     Clone this repository. (You can either use git or the green "Code" button that's on top right.)
@@ -43,8 +47,10 @@ As mentioned earlier, having a dependency on a marketplace extension prevents me
     ????
 
 - #### Step 6:
-    Profit?</br>
-    Actually, no. You cannot really use the launcher directly after cloning repository since you _have to_ use it with an already cloned repository of the `dev` branch of the actual game, as well as an existing build. Most of the time trying to pair the latest commit of launcher with the stable branch game will give unintended results, and trying to run the game directly would just force you to clone the game's repository and recompile the game _every single time_.</br>
+    Profit?
+    
+    Actually, no. You cannot really use the launcher directly after cloning repository since you _have to_ use it with an already cloned repository of the `dev` branch of the actual game, as well as an existing build. Most of the time trying to pair the latest commit of launcher with the stable branch game will give unintended results, and trying to run the game directly would just force you to clone the game's repository and recompile the game _every single time_.
+
     Instead you need to manually build the game according to the [Manual Building Guide](https://github.com/MorsGames/sm64plus/wiki/Manual-Building-Guide). The only thing you need to do differently is to use the command `git clone https://github.com/MorsGames/sm64plus.git --branch dev` instead of what's written there. The folder you choose for the cloned repository doesn't entirely matter, just try not to forget it because we will be needing it later.
 
 - #### Step 7:
