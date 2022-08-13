@@ -20,10 +20,10 @@ Using GameMaker paid off in the sense that it saved me a lot of time I would hav
 
 - GameMaker does not allow you to launch other executables directly. For this purpose I use [an existing marketplace extension](https://marketplace.yoyogames.com/assets/575/execute-shell), which gets the job done on Windows, but I couldn't get it working under Linux. This is the primary reason why the Linux version of the launcher is not available yet.
 - GameMaker doesn't give you a way to convert keyboard inputs to DirectInput keycodes as far as I'm aware, which is why the keyboard binding options are so terrible.
-- You cannot get a list of common resolutions the system supports, so you have to manually enter the values on the launcher (which is very clunky!).
+- You cannot get a list of common resolutions your system may support, so you have to manually enter resolution values on the launcher (which is very clunky!).
 - The launcher is completely separate from the game itself. This isn't as big of a problem because there would need to be a seperate builder/updater application either way.
 
-All these issues (except the last) can be solved with a custom C/C++ extension, but this is not something I have the time to look into at the moment. If anyone wants to help on this aspect, please let me know.
+All of these issues (except the last) could be solved with a custom C/C++ extension, but this is not something I have the time to look into at the moment. If anyone wants to help on this aspect, please let me know.
 
 ## Linux Version?
 
@@ -35,32 +35,24 @@ As mentioned earlier, having a dependency on a marketplace extension prevents me
     [Download and install the latest version of GameMaker.](https://gamemaker.io/en)
 
 - #### Step 2:
-    Clone this repository. (You can either use git or the green "Code" button that's on top right.)
+    Clone this repository. (We can either use git or the green "Code" button that's at the top right of this page.)
 
 - #### Step 3:
     Open the project in GameMaker.
 
 - #### Step 4:
-    Run the build.
+    Trying to run the launcher directly now would force us to clone the game's repository and recompile the game _every single time_ we want to run the launcher, which is not ideal. In addition, it would try to download the stable branch of the repository, which would likely not work. We need to work with the `dev` branch.
+
+   So we need to manually build the game according to the [Manual Building Guide](https://github.com/MorsGames/sm64plus/wiki/Manual-Building-Guide). The only thing we need to do differently is to use the command `git clone https://github.com/MorsGames/sm64plus.git --branch dev` in step 4 instead.
+    
+    The folder we choose for the cloned repository doesn't entirely matter, just try not to forget it because we will be needing it later.
 
 - #### Step 5:
-    ????
-
-- #### Step 6:
-    Profit?
-
-    Actually, no. You cannot really use the launcher directly after cloning repository. You _have to_ use it with an already cloned repository of the `dev` branch of the actual game, as well as an existing build. Most of the time trying to pair the latest commit of launcher with the stable branch game will give unintended results, and trying to run the game directly would just force you to clone the game's repository and recompile the game _every single time_.
-
-    Instead you need to manually build the game according to the [Manual Building Guide](https://github.com/MorsGames/sm64plus/wiki/Manual-Building-Guide). The only thing you need to do differently is to use the command `git clone https://github.com/MorsGames/sm64plus.git --branch dev` instead of what's written there. The folder you choose for the cloned repository doesn't entirely matter, just try not to forget it because we will be needing it later.
-
-- #### Step 7:
-    Run the launcher from GameMaker in debug mode, using the lil' bug icon* that's right next to the triangle. It will tell you to enter the repository path to a specific text file. This repository path is the `sm64plus` folder created by the clone command. Do that.
+    Run the launcher from GameMaker in debug mode, using the bug icon that's right next to the run triangle. It will tell you to enter the repository path to a specific text file. This repository path is the `sm64plus` folder created by the clone command. Do that.
 
 - #### Step 8:
     Run the launcher again the same way, and voila!
 
-_\*I do not know if there's a rapper called Lil' Bug. If there is, then ignore what I said. It's an actual bug icon, not some rapper dude from Boston._
-
 ## More
 
-[All the information you will need about the base game is on its own repository.](https://github.com/MorsGames/sm64plus)
+[All the information you will need about the base game is in its own repository.](https://github.com/MorsGames/sm64plus)
