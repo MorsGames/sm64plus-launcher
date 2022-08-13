@@ -1,10 +1,10 @@
 # SM64 Plus Launcher
 
-This is the repository for the launcher for [SM64Plus](https://github.com/MorsGames/sm64plus), written using GameMaker 2022.2.
+This is the repository of the launcher for [SM64Plus](https://github.com/MorsGames/sm64plus), made using GameMaker 2022.2.
 
 Originally I intended to release the source code for it at SM64Plus's initial launch, but as I was working on the launcher the code for it started getting messier and messier, and I always told myself that I'd release it once I refactored it and made it more presentable.
 
-This never happened, so I'm releasing the code as is. There are a lot of improvements that can be made with the code structure at places, but it gets the job done rather well regardless.
+This never happened, so I'm releasing the code as is. There are a lot of improvements that can be made with the code at places, but it gets the job done well regardless.
 
 ## Why GameMaker?
 
@@ -50,9 +50,9 @@ As mentioned earlier, having a dependency on a marketplace extension prevents me
 - #### Step 5:
     Run the launcher from GameMaker in debug mode, using the bug icon that's right next to the run triangle. It will tell you to enter the repository path to a specific text file. This repository path is the `sm64plus` folder created by the clone command. Do that.
 
-- #### Step 8:
+- #### Step 6:
     Run the launcher again the same way, and voila!
 
 ## More
 
-[All the information you will need about the base game is in its own repository.](https://github.com/MorsGames/sm64plus)
+[All the information you will need about the base game can be found in its own repository.](https://github.com/MorsGames/sm64plus)
