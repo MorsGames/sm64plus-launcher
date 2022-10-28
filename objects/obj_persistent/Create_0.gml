@@ -57,14 +57,14 @@ window_set_size(1280, 720);
 
 // Load the launcher settings
 ini_open(INI2_PATH)
-var _fullscreen = ini_read_real("LAUNCHER", "fullscreen", false)
+global.fullscreen = ini_read_real("LAUNCHER", "fullscreen", false)
 global.scaling_mode = ini_read_real("LAUNCHER", "scaling_mode", 1)
 global.mute = ini_read_real("LAUNCHER", "mute", 0)
 ini_close()
 
-if (_fullscreen)
+if (global.fullscreen)
 	window_set_fullscreen(true)
 else
 	timer(window_center, 1);
 
-window_set_cursor(_fullscreen ? cr_none : cr_default);
+window_set_cursor(global.fullscreen ? cr_none : cr_default);

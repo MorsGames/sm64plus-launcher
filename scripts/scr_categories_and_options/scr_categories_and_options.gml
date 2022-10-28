@@ -58,6 +58,113 @@ function n64_button_to_enum(button_value) {
 	}
 }
 
+// The Xbox controller buttons, in an easier to work with form
+// These are based on SDL button codes (2 ^ (n + 1))
+enum controller_buttons {
+	
+	none        = 0,
+	a           = 1 << 1,
+	b           = 1 << 2,
+    x           = 1 << 3,
+    y           = 1 << 4,
+    select      = 1 << 5,
+    guide       = 1 << 6,
+	start       = 1 << 7,
+    left_stick  = 1 << 8,
+    right_stick = 1 << 9,
+	l           = 1 << 10,
+	r           = 1 << 11, 
+	dpad_up     = 1 << 12,
+	dpad_down   = 1 << 13,
+	dpad_left   = 1 << 14,
+	dpad_right  = 1 << 15,
+	zl          = 1 << 22,
+    zr          = 1 << 23
+}
+
+// Returns the enum value based on the raw button id
+function controller_button_to_enum(button_value) {
+	switch (button_value) {
+		default:
+			return controller_buttons.none;
+		case gp_face1:
+			return controller_buttons.a;
+		case gp_face2:
+			return controller_buttons.b;
+		case gp_face3:
+			return controller_buttons.x;
+		case gp_face4:
+			return controller_buttons.y;
+		case gp_select:
+			return controller_buttons.select;
+		case gp_start:
+			return controller_buttons.start;
+		case gp_stickl:
+			return controller_buttons.left_stick;
+		case gp_stickr:
+			return controller_buttons.right_stick;
+		case gp_shoulderl:
+			return controller_buttons.l;
+		case gp_shoulderr:
+			return controller_buttons.r;
+		case gp_padu:
+			return controller_buttons.dpad_up;
+		case gp_padd:
+			return controller_buttons.dpad_down;
+		case gp_padl:
+			return controller_buttons.dpad_left;
+		case gp_padr:
+			return controller_buttons.dpad_right;
+		case gp_shoulderlb:
+			return controller_buttons.zl;
+		case gp_shoulderrb:
+			return controller_buttons.zr;
+	}
+}
+
+// Returns a list containing the button names
+function controller_button_to_name(_state) {
+    
+    var _list = ds_list_create();
+            
+	if ((_state & controller_buttons.a) == controller_buttons.a)
+        ds_list_add(_list, "A");
+	if ((_state & controller_buttons.b) == controller_buttons.b)
+		ds_list_add(_list, "B");
+	if ((_state & controller_buttons.x) == controller_buttons.x)
+		ds_list_add(_list, "X");
+	if ((_state & controller_buttons.y) == controller_buttons.y)
+		ds_list_add(_list, "Y");
+    if ((_state & controller_buttons.start) == controller_buttons.start)
+		ds_list_add(_list, "Start");
+	if ((_state & controller_buttons.guide) == controller_buttons.guide)
+		ds_list_add(_list, "Guide");
+	if ((_state & controller_buttons.select) == controller_buttons.select)
+		ds_list_add(_list, "Select");
+	if ((_state & controller_buttons.left_stick) == controller_buttons.left_stick)
+		ds_list_add(_list, "Left Stick Press");
+	if ((_state & controller_buttons.right_stick) == controller_buttons.right_stick)
+		ds_list_add(_list, "Right Stick Press");
+	if ((_state & controller_buttons.l) == controller_buttons.l)
+		ds_list_add(_list, "Left Shoulder");
+	if ((_state & controller_buttons.r) == controller_buttons.r)
+		ds_list_add(_list, "Right Shoulder");
+	if ((_state & controller_buttons.dpad_up) == controller_buttons.dpad_up)
+		ds_list_add(_list, "D-Pad Up");
+	if ((_state & controller_buttons.dpad_down) == controller_buttons.dpad_down)
+		ds_list_add(_list, "D-Pad Down");
+	if ((_state & controller_buttons.dpad_left) == controller_buttons.dpad_left)
+		ds_list_add(_list, "D-Pad Left");
+	if ((_state & controller_buttons.dpad_right) == controller_buttons.dpad_right)
+		ds_list_add(_list, "D-Pad Right");
+	if ((_state & controller_buttons.zl) == controller_buttons.zl)
+		ds_list_add(_list, "Left Trigger");
+	if ((_state & controller_buttons.zr) == controller_buttons.zr)
+		ds_list_add(_list, "Right Trigger");
+    
+    return _list;
+}
+
 // All the key names
 global.key_names = ["Esc", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "-", "=", "Backspace", "Tab", "Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P", "[", "]", "Enter", "Ctrl (Left)", "A", "S", "D", "F", "G", "H", "J", "K", "L", ";", "'", "`", "Shift (Left)", "\\", "Z", "X", "C", "V", "B", "N", "M", ",", ".", "/", "Shift (Right)", "* (Numpad)", "Alt (Left)", "Space", "Caps Lock", "F1", "F2", "F3", "F4", "F5", "F6", "F7", "F8", "F9", "F10", "Num Lock", "Scroll Lock", "7 (Numpad)", "8 (Numpad)", "9 (Numpad)", "- (Numpad)", "4 (Numpad)", "5 (Numpad)", "6 (Numpad)", "+ (Numpad)", "1 (Numpad)", "2 (Numpad)", "3 (Numpad)", "0 (Numpad)", ". (Numpad)", "F11", "F12", "Unknown", "Unknown", "Unknown", "Unknown", "Unknown", "Unknown", "Unknown", "= (Numpad)", "^", "@", ":", "_", "Unknown", "Unknown", "Unknown", "Unknown", "Enter (Numpad)", "Ctrl (Right)", ", (Numpad)", "/ (Numpad)", "Unknown", "Alt (Right)", "Pause", "Home", "Up (Numpad)", "Page Up", "Left (Numpad)", "Right (Numpad)", "End", "Down (Numpad)", "Page Down", "Insert", "Delete", "Windows", "Windows (Right)"];
 

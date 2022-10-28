@@ -14,5 +14,5 @@ var _x  = room_width/2 + sin(current_frames)*shake;
 var _y2 = room_height/2 + (slide_out ? ease_out_back(-room_height, 0, progress) : ease_out_quart(room_height, 0, progress));
 
 draw_set_valign(fa_middle)
-draw_description(_x, _y2, "Enter a hex string of the color: " + color_string + "\n\nPress "+ input_action_get_name(key.select, true) + " when done.\nPress "+ input_action_get_name(key.del2, true) + " to reset.", 2)
+draw_text_custom(_x, _y2, "Enter a hex string of the color: " + color_string + "\n\nPress "+ input_action_get_name(key.select, true) + " when done.\nPress "+ input_action_get_name(key.del2, true) + " to reset.", 2)
 draw_set_valign(fa_top)

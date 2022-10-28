@@ -28,7 +28,8 @@ enum option_type {
 	frame_rate,
 	palette,
 	fixes,
-	draw_distance
+	draw_distance,
+    controller_button
 }
 
 // Replace the constants in the json file
@@ -64,6 +65,7 @@ function replace_json_constants(_contents) {
 	_contents = string_replace_all(_contents, "TYPE_PALETTE", "23");
 	_contents = string_replace_all(_contents, "TYPE_FIXES", "24");
 	_contents = string_replace_all(_contents, "TYPE_DRAW_DISTANCE", "25");
+	_contents = string_replace_all(_contents, "TYPE_CONTROLLER_BUTTON", "26");
 
 	return _contents;
 }
@@ -72,7 +74,12 @@ function replace_json_constants(_contents) {
 function get_option_text(option) {
 	var _name = option.name;
 	var _type = option.type;
-	var _state = option.state;
+    try {
+	    var _state = option.state;
+    }
+    catch(e) {
+	    var _state = -1;
+    }
 	
 	switch (_type) {
 		case option_type.boolean:
@@ -336,6 +343,29 @@ function get_option_text(option) {
 			else
 				return _name + ":❓" + string(_state) + "x";
 		    break;
+		case option_type.controller_button:
+
+			var _list = controller_button_to_name(_state);
+			
+			var _size = ds_list_size(_list);
+            var _str = "";
+
+			if (_size == 0)
+				_str = ":❌None";
+			else {
+				for (var i = 0; i < _size; i++) {
+					if (i == 0)
+						_str += ":❓(";
+					else
+						_str += " or (";
+					_str += ds_list_find_value(_list, i) + ")";
+				}
+			}
+
+            ds_list_destroy(_list);
+            
+            return _name + _str;
+		    break;
 	}
 }
 
@@ -370,6 +400,7 @@ function ini_load_item(_item, _category) {
 		case option_type.palette:
 		case option_type.fixes:
 		case option_type.draw_distance:
+        case option_type.controller_button:
 			_item.state = ini_read_real(_category.title, _item.internal_name, 0);
 			break;
 		case option_type.mouse_button:
@@ -417,6 +448,7 @@ function ini_save_item(_item, _category) {
 		case option_type.palette:
 		case option_type.fixes:
 		case option_type.draw_distance:
+        case option_type.controller_button:
 			ini_write_real(_category.title, _item.internal_name, _item.state);
 			break;
 		case option_type.mouse_button:

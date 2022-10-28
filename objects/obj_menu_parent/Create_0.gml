@@ -38,11 +38,11 @@ change_selected_option = function(total_options, items_per_page, can_be_changed,
 		sfx_play(snd_move);
 		
 	if (selected_option > scroll_offset + items_per_page && scroll_offset < total_options - items_per_page - 2)
-		scroll_offset += 1
+		scroll_offset += 1;
 	if (selected_option < scroll_offset + 1 && scroll_offset > 0)
-		scroll_offset -= 1
+		scroll_offset -= 1;
 
-	select_y += clamp(lerp(select_y, (selected_option-scroll_offset-indicator_offset)*20, 0.25)-select_y, -16, 16)
+	select_y += clamp(lerp(select_y, (selected_option-scroll_offset-indicator_offset)*20, 0.375)-select_y, -32, 32);
 	
 	return _movement;
 }

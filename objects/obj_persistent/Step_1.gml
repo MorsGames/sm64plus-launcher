@@ -8,15 +8,15 @@ if (!keyboard_check(vk_alt))
 else {
 	
 	if (keyboard_check_pressed(vk_enter)) {
+        
+        global.fullscreen = !global.fullscreen;
 		
-		var _fullscreen = window_get_fullscreen()
+		window_set_fullscreen(global.fullscreen)
 		
-		window_set_fullscreen(!_fullscreen)
-		
-		window_set_cursor(_fullscreen ? cr_default : cr_none);
+		window_set_cursor(global.fullscreen ? cr_none : cr_default);
 
 		ini_open(INI2_PATH)
-		ini_write_real("LAUNCHER", "fullscreen", !_fullscreen)
+		ini_write_real("LAUNCHER", "fullscreen", global.fullscreen)
 		ini_close()	
 	}
 	if (keyboard_check_pressed(ord("M"))) {
@@ -41,7 +41,7 @@ timer_system_update()
 
 
 // Resize the view
-if (window_get_fullscreen()) {
+if (global.fullscreen) {
 	var _width = display_get_width()
 	var _height = display_get_height()
 }

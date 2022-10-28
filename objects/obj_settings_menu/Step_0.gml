@@ -10,7 +10,7 @@ else {
 	
 	x_go = lerp(x_go, selected_category, 0.375)
 	
-	if (!instance_exists(obj_palette_editor)) {
+	if (!instance_exists(obj_palette_editor) && !instance_exists(obj_button_detector)) {
 	
 		if (selected_category < 0)
 			presets_page();

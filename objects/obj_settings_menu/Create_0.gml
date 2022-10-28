@@ -63,6 +63,16 @@ settings_page = function() {
 						}
 					}
 					break;
+				case option_type.controller_button:
+					selected = !selected;
+					sfx_play(selected ? snd_select : snd_cancel)
+					shake = 1;
+					if (selected) {
+						with (instance_create_depth(0, 0, depth-1, obj_button_detector)) {
+							item = _option;
+						}
+					}
+					break;
 				default:
 					selected = !selected;
 					sfx_play(selected ? snd_select1 : snd_select2)

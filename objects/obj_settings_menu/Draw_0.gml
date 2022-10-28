@@ -42,10 +42,10 @@ for (var _current_category=-1; _current_category<global.category_count; _current
 		}
 	
 		if (_current_category != -1) {
-			draw_description(_x_offset+room_width/2-160-abs(sin(arrow_frames/32))*8, 24, "<", 1.5)
+			draw_text_custom(_x_offset+room_width/2-160-abs(sin(arrow_frames/32))*8, 24, "<", 1.5)
 		}
 		if (_current_category != global.category_count-1) {
-			draw_description(_x_offset+room_width/2+160+abs(sin(arrow_frames/32))*8, 24, ">", 1.5)
+			draw_text_custom(_x_offset+room_width/2+160+abs(sin(arrow_frames/32))*8, 24, ">", 1.5)
 		}
 	
 		var _alpha = 1-abs(_x_offset)/room_width;
@@ -99,7 +99,9 @@ for (var _current_category=-1; _current_category<global.category_count; _current
 				else {
 					
 					var _str;
-					if (selected && _hovered && _category.items[i].type != option_type.color)
+					if (selected && _hovered
+                        && _category.items[i].type != option_type.color
+                        && _category.items[i].type != option_type.controller_button)
 						_str = "⬛<⬜" + get_option_text(_category.items[i]) + "⬛> ";
 					else
 						_str = get_option_text(_category.items[i]);
@@ -119,14 +121,14 @@ for (var _current_category=-1; _current_category<global.category_count; _current
 
 			// Description
 			if (_current_category < 0) {
-				draw_description(room_width/2, room_height-75, "Here you can save or load your settings as presets.", 1.5)
+				draw_text_custom(room_width/2, room_height-75, "Here you can save or load your settings as presets.", 1.5)
 			}
 			else {
 				var _description = _option.description;
-				if (string_height_ext(_description, 12, room_width/1.5-32) > 48)
-					draw_description(room_width/2, room_height-71, _description, 1)
+				if (string_height_ext(_description, 12, room_width/1.5-32) > 36)
+					draw_text_custom(room_width/2, room_height-71, _description, 1)
 				else
-					draw_description(room_width/2, room_height-75, _description, 1.5)
+					draw_text_custom(room_width/2, room_height-75, _description, 1.5)
 			}
 			draw_set_alpha(1);
 		}

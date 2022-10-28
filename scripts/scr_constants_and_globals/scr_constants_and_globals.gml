@@ -1,4 +1,6 @@
-#macro PATH (debug_mode ? (global.debug_path + @"\") : (program_directory + @"\sm64plus\"))
+#macro DEBUG true
+
+#macro PATH (DEBUG ? (global.debug_path + @"\") : (program_directory + @"\sm64plus\"))
 #macro GFX_PATH (PATH + @"textures\")
 #macro GAME_PATH (PATH + @"build\us_pc\")
 #macro CATEGORIES_PATH (PATH + @"launcher\categories.json")
@@ -40,9 +42,9 @@ global.font = font_add_sprite(spr_font, ord(" "), false, 1);
 global.show_hidden = false;
 
 // Debug/Development mode
-if (debug_mode) {
+if (DEBUG) {
 	
-	var _file = file_text_open_read(working_directory + "path.txt");
+	var _file = file_text_open_read(game_save_id + "path.txt");
 		 
 	if (_file == -1) {
 		show_message("Please create a file in your working directory (\"%LOCALAPPDATA%\\SM64Plus\") called \"path.txt\" and put the path to the game's repository there.");
