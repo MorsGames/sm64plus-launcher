@@ -38,7 +38,9 @@ display_message = function(msg) {
 
 // Shader uniforms and the background surface
 
-res_u = shader_get_uniform(shd_curve, "u_uResolution");
+if (os_type == os_windows)
+    res_u = shader_get_uniform(shd_curve, "u_uResolution");
+    
 surface_recreate = function() {
     surf = surface_create(view_wport[0], view_hport[0]);
 }

@@ -116,9 +116,9 @@ function get_option_text(option) {
 				case 1:
 					return _name + ":❓Always Ask";
 				case 2:
-					return _name + ":❓Auto";
+					return _name + ":✔Yep";
 				case 3:
-					return _name + ":✔Smart";
+					return _name + ":❓Legacy";
 			}
 		    break;
 		case option_type.noise_type: 
@@ -183,12 +183,10 @@ function get_option_text(option) {
 		case option_type.camera_mode: 
 		    switch (_state) {
 				case 0:
-					return _name + ":❌Lakitu Cam";
+					return _name + ":✔Lakitu Cam";
 				case 1:
-					return _name + ":❌Mario Cam";
+					return _name + ":✔Mario Cam";
 				case 2:
-					return _name + ":❓Modern Cam";
-				case 3:
 					return _name + ":❓Custom Cam";
 			}
 			break;
@@ -262,6 +260,8 @@ function get_option_text(option) {
 					return _name + ":✔On";
 				case 2:
 					return _name + ":❓Constant Chase!";
+				case 3:
+					return _name + ":❌Unfair Chase!!!";
 			}
 			break;
 		case option_type.color: 
@@ -492,17 +492,19 @@ function change_option_state(_option, _hor_movement, _long_hor_movement) {
 			}
 			break;
 		case option_type.encore_mode:
-		case option_type.star_message:
 		case option_type.blj_everywhere:
-		case option_type.camera_mode:
+		case option_type.green_demon_mode:
 			_option.state = clamp(_option.state + _hor_movement + wait(4)*_long_hor_movement, 0, 3);
 		break;
+		case option_type.star_message:
+			_option.state = clamp(_option.state + _hor_movement + wait(4)*_long_hor_movement, 0, global.show_hidden ? 3 : 2);
+		break;
+		case option_type.camera_mode:
 		case option_type.noise_type:
 		case option_type.hud_layout:
 		case option_type.lives_mode:
 		case option_type.texture_filtering:
 		case option_type.moon_jump:
-		case option_type.green_demon_mode:
 		case option_type.lod:
 		case option_type.fixes:
 			_option.state = clamp(_option.state + _hor_movement + wait(4)*_long_hor_movement, 0, 2);
@@ -534,5 +536,123 @@ function change_option_state(_option, _hor_movement, _long_hor_movement) {
 		case option_type.draw_distance:
 			_option.state = max(0, _option.state + (_hor_movement + wait(4)*_long_hor_movement * 2)/2);
 			break;
+	}	
+}
+
+enum option_limit {
+    none,
+    left,
+    right,
+    both
+}
+
+// Gets the current option limits
+function get_option_limit(_option) {
+    
+    var _state = _option.state;
+	
+	switch (_option.type) {
+        
+		case option_type.uint:
+        case option_type.draw_distance:
+			return (_state <= 0) ? option_limit.right : option_limit.both;
+            
+		case option_type.float:
+		case option_type.multiplier:
+			return option_limit.both;
+            
+		case option_type.key:
+			var _keyboard_value = get_digits(keyboard_string);
+			if (_keyboard_value != "") {
+                if (_state <= 1)
+                    return option_limit.right;
+                else if (_state >= 999)
+                    return option_limit.left;
+                else
+                    return option_limit.both;
+            }
+			else {
+                if (_state <= 1)
+                    return option_limit.right;
+                else if (_state >= 336)
+                    return option_limit.left;
+                else
+                    return option_limit.both;
+			}
+            
+		case option_type.encore_mode:
+		case option_type.blj_everywhere:
+		case option_type.green_demon_mode:
+            if (_state <= 0)
+                return option_limit.right;
+            else if (_state >= 3)
+                return option_limit.left;
+            else
+                return option_limit.both;
+                
+		case option_type.star_message:
+            if (_state <= 0)
+                return option_limit.right;
+            else if (_state >= global.show_hidden ? 3 : 2)
+                return option_limit.left;
+            else
+                return option_limit.both;
+                
+		case option_type.camera_mode:
+		case option_type.noise_type:
+		case option_type.hud_layout:
+		case option_type.lives_mode:
+		case option_type.texture_filtering:
+		case option_type.moon_jump:
+		case option_type.lod:
+		case option_type.fixes:
+		case option_type.graphics_backend_windows:
+            if (_state <= 0)
+                return option_limit.right;
+            else if (_state >= 2)
+                return option_limit.left;
+            else
+                return option_limit.both;
+                
+		case option_type.graphics_backend_other:
+            return option_limit.none;
+            
+		case option_type.mouse_button:
+			return (_state <= 0.1) ? option_limit.right : option_limit.both;
+            
+		case option_type.percentage:
+            if (_state <= 0)
+                return option_limit.right;
+            else if (_state >= 1)
+                return option_limit.left;
+            else
+                return option_limit.both;
+                
+		case option_type.monitor:
+            if (_state <= 1)
+                return option_limit.right;
+            else if (_state >= 10)
+                return option_limit.left;
+            else
+                return option_limit.both;
+                
+		case option_type.frame_rate:
+            if (_state <= 0)
+                return option_limit.right;
+            else if (_state >= 1)
+                return option_limit.left;
+            else
+                return option_limit.both;
+            
+		case option_type.palette:
+            if (_state <= 0)
+                return option_limit.right;
+            else if (_state >= 11)
+                return option_limit.left;
+            else
+                return option_limit.both;
+                
+        default:
+            return option_limit.both;
 	}	
 }

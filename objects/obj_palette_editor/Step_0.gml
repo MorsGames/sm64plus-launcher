@@ -5,7 +5,7 @@ if (slide_out) {
 	else {
 		if (save) {
 			item.state[0] = rgb_to_bgr(hex_to_real(color_string))
-			item.state[1] = real_to_hex(hex_to_real(color_string))
+			item.state[1] = real_to_hex(hex_to_real(color_string), 6)
 		}
 		obj_settings_menu.selected = false;
 		instance_destroy();

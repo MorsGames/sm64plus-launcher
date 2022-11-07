@@ -1,4 +1,4 @@
-#macro DEBUG true
+#macro DEBUG debug_mode
 
 #macro PATH (DEBUG ? (global.debug_path + @"\") : (program_directory + @"\sm64plus\"))
 #macro GFX_PATH (PATH + @"textures\")

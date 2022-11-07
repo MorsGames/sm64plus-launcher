@@ -11,6 +11,8 @@ enum key {
 	right2,
 	up2,
 	down2,
+    page_left,
+    page_right,
 	select,
 	select2,
 	back,
@@ -30,6 +32,9 @@ input_action_add(key.left2, ord("A"), gp_stickll)
 input_action_add(key.right2, ord("D"), gp_sticklr)
 input_action_add(key.up2, ord("W"), gp_sticklu)
 input_action_add(key.down2, ord("S"), gp_stickld)
+
+input_action_add(key.page_left, -2, gp_shoulderl)
+input_action_add(key.page_right, -2, gp_shoulderr)
 
 input_action_add(key.select, vk_space, gp_face1)
 input_action_add(key.select2, vk_enter, gp_start)

@@ -80,7 +80,7 @@ if (view_wport[0] != _width || view_hport[0] != _height) {
 	camera_set_view_size(view_camera[0], room_width, room_height)
 	view_wport[0] = _width;
 	view_hport[0] = _height;
-	surface_resize(application_surface, min(_width*2, 3840), min(_height*2, 2160*2))
+	surface_resize(application_surface, min(_width, 3840), min(_height, 2160*2))
 	
 	with (obj_background) {
 		surface_free(surf);

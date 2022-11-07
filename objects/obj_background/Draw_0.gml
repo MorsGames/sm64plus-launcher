@@ -41,7 +41,6 @@ if (os_type == os_windows) {
 	gpu_set_blendmode(bm_normal)
 }
 
-gpu_set_tex_filter(1);
 //draw_sprite_tiled_ext(spr_fake_polygon, 0, _x*2, _y*2, 1, 1, c_white, 0.5);
 surface_reset_target()
 

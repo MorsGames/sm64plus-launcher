@@ -21,6 +21,7 @@ move = 1;
 
 // Shake
 shake = 0;
+h_shake = 0;
 
 // Change which option is selected
 change_selected_option = function(total_options, items_per_page, can_be_changed, indicator_offset = 0) {
@@ -85,9 +86,9 @@ go_back = function() {
 	}
 }
 
-add_shake = function(hovered) {
-	if (hovered && shake > 0)
-		return sin(current_frames)*shake;
+add_shake = function(hovered, shake_amount) {
+	if (hovered && shake_amount > 0)
+		return sin(current_frames)*shake_amount;
 	else
 		return 0;
 }

@@ -20,7 +20,7 @@ get_options_per_page = function() {
 
 // Change which category is selected
 change_category = function() {
-	var _hor_movement = input_check_pressed(key.right) - input_check_pressed(key.left);
+	var _hor_movement = input_check_pressed(key.right) - input_check_pressed(key.left) + input_check_pressed(key.page_right) - input_check_pressed(key.page_left);
 	var _long_hor_movement = input_check_long(key.right) - input_check_long(key.left);
 	var _original_category = selected_category;
 	selected_category = clamp(selected_category + _hor_movement + wait(8)*_long_hor_movement, -1, global.category_count-1);
@@ -86,11 +86,19 @@ settings_page = function() {
 			// Change the state of the selected option
 			var _hor_movement = input_check_pressed(key.right) - input_check_pressed(key.left);
 			var _long_hor_movement = input_check_long(key.right) - input_check_long(key.left);
-			
-			if (_hor_movement <> 0 || (_long_hor_movement <> 0 && wait(4)))
-				sfx_play(snd_option)
 				
+            var _old_state = _option.state;
 			change_option_state(_option, _hor_movement, _long_hor_movement);
+			
+			if (_hor_movement <> 0 || (_long_hor_movement <> 0 && wait(4))) {
+             
+                if (_option.state == _old_state) {
+                    sfx_play(snd_denied);
+                    h_shake = 1
+                }
+                else
+				    sfx_play(snd_option);
+            }
 		}
 		else {
 			// Change which option is selected

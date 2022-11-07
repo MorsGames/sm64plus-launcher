@@ -1,6 +1,12 @@
 progress = 0
 slide_out = 0;
 
+set_fullscreen = function() {
+    
+    if (global.fullscreen)
+        window_set_fullscreen(false);
+}
+
 launch_game = function() {
     
 	if (directory_exists(EXTERNAL_PATH_ORIGINAL))
@@ -16,7 +22,6 @@ launch_game = function() {
 	slide_out = 1;
 }
     
-if (global.fullscreen)
-    timer(window_set_fullscreen, 30, false, false);
+timer(set_fullscreen, 45);
 
 timer(launch_game, 60)
