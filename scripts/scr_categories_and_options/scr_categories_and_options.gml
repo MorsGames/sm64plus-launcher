@@ -171,6 +171,9 @@ global.key_names = ["Esc", "1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "-"
 // Setting up the categories and options
 global.categories = [];
 
+// Launcher stuff
+global.launcher_category = {};
+
 // Loads all the categories and options
 function load_categories() {
 	
@@ -255,6 +258,47 @@ function load_settings(path, load_recommended = true, partial_load = false) {
 		}
 	}
 	ini_close()	
+}
+
+function set_fullscreen(fullscreen) {
+    
+    global.fullscreen = fullscreen;
+		
+    window_set_fullscreen(global.fullscreen)
+    window_set_cursor(global.fullscreen ? cr_none : cr_default);
+}
+
+function set_mute(mute) {
+    
+    global.mute = mute;
+    
+	if (room != rm_init) {
+        
+		if (global.mute)
+			audio_stop_sound(snd_music)
+		else
+			music_play(snd_music)
+	}
+}
+
+// Load the settings for the launcher
+function load_launcher_settings() {
+    
+    ini_open(INI2_PATH)
+		
+    for (var j=0; j<array_length(global.launcher_category.items); j++) {
+			
+    	var _item = global.launcher_category.items[j];
+			
+    	ini_load_item(_item, global.launcher_category);
+    }
+    
+    set_fullscreen(ini_read_string("LAUNCHER", "fullscreen", "false") == "true");
+    set_mute(ini_read_string("LAUNCHER", "mute", "false") == "true");
+    
+    global.scaling_mode = ini_read_real("LAUNCHER", "scaling_mode", 1);
+    global.quick_launch = ini_read_string("LAUNCHER", "quick_launch", "false") == "true";
+    global.close_on_launch = ini_read_string("LAUNCHER", "close_on_launch", "false") == "true";
 }
 
 // Saves the settings

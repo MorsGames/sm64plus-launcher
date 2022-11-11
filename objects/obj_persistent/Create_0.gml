@@ -60,16 +60,24 @@ application_surface_draw_enable(false);
 // Set the window size
 window_set_size(1280, 720);
 
-// Load the launcher settings
-ini_open(INI2_PATH)
-global.fullscreen = ini_read_real("LAUNCHER", "fullscreen", false)
-global.scaling_mode = ini_read_real("LAUNCHER", "scaling_mode", 1)
-global.mute = ini_read_real("LAUNCHER", "mute", 0)
-ini_close()
+// LAUNCHER SETTINGS STUFF
 
-if (global.fullscreen)
-	window_set_fullscreen(true)
-else
+// Load the json to memory
+var _launcher_file = file_text_open_read(LAUNCHER_CATEGORY_PATH);
+var _launcher_contents = "";
+
+while (!file_text_eof(_launcher_file)) {
+	_launcher_contents += file_text_readln(_launcher_file);
+}
+file_text_close(_launcher_file);
+
+// Replace the constants
+_launcher_contents = replace_json_constants(_launcher_contents);
+
+// Parse the result
+global.launcher_category = json_parse(_launcher_contents);
+
+load_launcher_settings();
+
+if (!global.fullscreen)
 	timer(window_center, 1);
-
-window_set_cursor(global.fullscreen ? cr_none : cr_default);

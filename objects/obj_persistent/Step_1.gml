@@ -9,30 +9,39 @@ else {
 	
 	if (keyboard_check_pressed(vk_enter)) {
         
-        global.fullscreen = !global.fullscreen;
+        set_fullscreen(!global.fullscreen);
 		
-		window_set_fullscreen(global.fullscreen)
-		
-		window_set_cursor(global.fullscreen ? cr_none : cr_default);
+		sfx_play(snd_select)
 
 		ini_open(INI2_PATH)
 		ini_write_real("LAUNCHER", "fullscreen", global.fullscreen)
-		ini_close()	
+		ini_close()
+        
+        for (var j=0; j<array_length(global.launcher_category.items); j++) {
+			
+			var _item = global.launcher_category.items[j];
+			
+			if (_item.internal_name == "fullscreen")
+				_item.state = global.fullscreen;
+		}
 	}
 	if (keyboard_check_pressed(ord("M"))) {
+        
+        set_mute(!global.mute);
 		
-		global.mute = !global.mute;
 		sfx_play(snd_select)
-		if (room != rm_init) {
-			if (global.mute)
-				audio_stop_sound(snd_music)
-			else
-				music_play(snd_music)
-		}
 
 		ini_open(INI2_PATH)
 		ini_write_real("LAUNCHER", "mute", global.mute)
 		ini_close()	
+                
+        for (var j=0; j<array_length(global.launcher_category.items); j++) {
+			
+			var _item = global.launcher_category.items[j];
+			
+			if (_item.internal_name == "mute")
+				_item.state = global.mute;
+		}
 	}
 }
 

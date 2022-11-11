@@ -15,7 +15,7 @@ if (instance_exists(obj_menu_parent)) {
 	}
 	
 	draw_set_halign(fa_right)
-	draw_text_custom(room_width-8+abs(obj_menu_parent.y_offset), 4, input_action_get_name(key.back, 1) + (instance_exists(obj_title_menu) ? ": Quit" : ": Back"), 1.5)
+	draw_text_custom(room_width-8+abs(obj_menu_parent.y_offset), 4, input_action_get_name(key.back, 1) + (instance_exists(obj_title_menu) ? ": Quit" : ": Save & Return"), 1.5)
 	draw_set_halign(fa_center)
 	
 	if (instance_exists(obj_title_menu)) {

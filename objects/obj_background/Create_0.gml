@@ -2,7 +2,7 @@
 
 // Load the backgrounds
 var _add = function(name) {
-	var _path = GFX_PATH + "skyboxes\\" + name + ".png";
+	var _path = GFX_PATH + name + ".png";
 
 	if (file_exists(_path))
 	    return sprite_add(_path, 1, 0, 0, 0, 0);
@@ -11,7 +11,18 @@ var _add = function(name) {
 	}
 }
 
-backgrounds = [_add("water"), _add("cloud_floor"), _add("ccm"), _add("ssl"), _add("wdw"), _add("bidw"), _add("bitfs"), _add("bits"), spr_void]
+backgrounds = [
+            _add("skyboxes\\water"),
+            _add("skyboxes\\cloud_floor"),
+            _add("skyboxes\\ccm"),
+            _add("skyboxes\\ssl"),
+            _add("skyboxes\\wdw"),
+            _add("skyboxes\\bidw"),
+            _add("skyboxes\\bitfs"),
+            _add("skyboxes\\bits"),
+            spr_void,
+            _add("inside\\inside_castle_textures.03000.rgba16")];
+            
 backgrounds_no = 8;
 
 background_index = choose(1, 2, 3, 4);
@@ -20,7 +31,7 @@ change_background = function(new_index) {
 	background_index_last = background_index;
 	background_index = new_index % backgrounds_no;
 	if (background_index < 0)
-		background_index = backgrounds_no;
+		background_index = backgrounds_no-background_index-1;
 }
 change_background(background_index);
 background_alpha = 1;

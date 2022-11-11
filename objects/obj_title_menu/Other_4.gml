@@ -28,3 +28,5 @@ if (file_exists(INI_PATH))
 	load_settings(INI_PATH);
 else
 	load_settings(INTERNAL_PRESETS_PATH + "Recommended.ini", false);
+
+ini_close()

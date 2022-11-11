@@ -9,10 +9,10 @@ function execute_shell(prog, arg) {
         return external_call(global.__lib64Plus_execute, prog + " " + arg);
 }
 
-function execute_program(prog, arg) {
+function execute_program(prog, arg, _wait = true) {
 	
     if (CURRENT_OS == os_windows)
-        return external_call(global.__lib64Plus_execute_wait, prog + " " + arg);
+        return external_call(_wait ? global.__lib64Plus_execute_wait : global.__lib64Plus_execute, prog + " " + arg);
 }
 
 function execute_shell_admin(prog, arg) {

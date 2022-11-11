@@ -23,7 +23,7 @@ change_category = function() {
 	var _hor_movement = input_check_pressed(key.right) - input_check_pressed(key.left) + input_check_pressed(key.page_right) - input_check_pressed(key.page_left);
 	var _long_hor_movement = input_check_long(key.right) - input_check_long(key.left);
 	var _original_category = selected_category;
-	selected_category = clamp(selected_category + _hor_movement + wait(8)*_long_hor_movement, -1, global.category_count-1);
+	selected_category = clamp(selected_category + _hor_movement + wait(8)*_long_hor_movement, -2, global.category_count-1);
 
 	if (_hor_movement <> 0 || _long_hor_movement <> 0) {
 		scroll_offset = 0;
@@ -36,9 +36,9 @@ change_category = function() {
 	arrow_frames++;
 }
 
-settings_page = function() {
+settings_page = function(launcher_settings) {
 
-	var _category = global.categories[selected_category];
+	var _category = launcher_settings ? global.launcher_category : global.categories[selected_category];
 	var _total_options = array_length(_category.items);
 	
 	// If the page isn't empty
@@ -105,7 +105,7 @@ settings_page = function() {
 			do {
 				 change_selected_option(_total_options, get_options_per_page()-2, round(x_go) == selected_category);
 			}
-			until (is_enabled(global.categories[selected_category].items, selected_option) || global.show_hidden)
+			until (is_enabled(_category.items, selected_option) || global.show_hidden)
 	
 			// Change the selected category
 			change_category();

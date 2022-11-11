@@ -12,7 +12,7 @@ draw_rectangle(box_width, room_height-83, room_width-box_width-1, room_height-bo
 draw_set_alpha(1)
 draw_set_color(c_white)
 
-for (var _current_category=-1; _current_category<global.category_count; _current_category++) {
+for (var _current_category=-2; _current_category<global.category_count; _current_category++) {
 	
 	var _offset = _current_category-x_go;
 	var _x_offset = _offset*room_width;
@@ -23,7 +23,7 @@ for (var _current_category=-1; _current_category<global.category_count; _current
 		
 		var _total_options;
 		
-		if (_current_category < 0) {
+		if (_current_category == -1) {
 			_total_options = array_length(options)+1;
 		
 			draw_letters(_x_offset+room_width/2, 30, "PRESETS", 1.5);
@@ -32,7 +32,7 @@ for (var _current_category=-1; _current_category<global.category_count; _current
 		}
 		else {
 		
-			var _category = global.categories[_current_category];
+			var _category = _current_category < -1 ? global.launcher_category : global.categories[_current_category];
 		
 			_total_options = array_length(_category.items);
 			var _option = _category.items[min(selected_option, _total_options-1)];
@@ -41,7 +41,7 @@ for (var _current_category=-1; _current_category<global.category_count; _current
 			draw_letters(_x_offset+room_width/2, 30, _category.title, 1.5);
 		}
 	
-		if (_current_category != -1) {
+		if (_current_category != -2) {
 			draw_text_custom(_x_offset+room_width/2-160-abs(sin(arrow_frames/32))*8, 24, "<", 1.5)
 		}
 		if (_current_category != global.category_count-1) {
@@ -81,7 +81,7 @@ for (var _current_category=-1; _current_category<global.category_count; _current
 				var _x_pos = room_width/2 + add_shake(_hovered, h_shake);
 				var _y_pos = (i-scroll_offset)*20 + add_shake(_hovered, shake);
 				
-				if (_current_category < 0) {
+				if (_current_category == -1) {
 					
 					if (i == _total_options-1) {
 						
@@ -141,7 +141,7 @@ for (var _current_category=-1; _current_category<global.category_count; _current
 				draw_option(room_width/2, 72 + _options_per_page*20 - 4 + sin(arrow_frames/16), "v", 1.5);
 
 			// Description
-			if (_current_category < 0) {
+			if (_current_category == -1) {
 				draw_text_custom(room_width/2, room_height-75, "Here you can save or load your settings as presets.", 1.5)
 			}
 			else {

@@ -8,4 +8,4 @@ else
 fi
 mv "$LOCALAPPDATA\SM64Plus\baserom.us.z64" "sm64plus\baserom.us.z64" || { tput setaf 1; echo "Couldn't move the ROM file."; read -n1 -r -p "Press any key to close this window." key; exit; }
 cd sm64plus || { tput setaf 1; echo "Couldn't enter the repository directory."; read -n1 -r -p "Press any key to close this window." key; exit; }
-make -j$(nproc) CUSTOM_TEXTURES=$1 || { tput setaf 1; echo "An error has occured during the building process. If the error has occured while extracting the assets, try a different ROM file."; read -n1 -r -p "Press any key to close this window." key; exit; }
+make -j$(nproc) CUSTOM_TEXTURES=$1 || { tput setaf 1; echo "An error has occured during the building process. If the error has occured while extracting the assets, try a different ROM file.\n\nOtherwise please refer to the FAQ: https://github.com/MorsGames/sm64plus/wiki/Frequently-Asked-Questions"; read -n1 -r -p "Press any key to close this window." key; exit; }

@@ -41,7 +41,12 @@ check_file = function(play_sound) {
 		// Cancel the update process if no exe
 		update = false;
 		
-		slide_out = 1;
+        if (global.quick_launch && !input_check_pressed(key.del)) {
+            instance_create_depth(0, 0, depth-1, obj_start_game);
+            play_sound = true;
+        }
+        else
+		    slide_out = 1;
 		var _snd = play_sound ? snd_start : snd_select;
 		if (!audio_is_playing(_snd))
 			sfx_play(_snd)

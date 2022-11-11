@@ -1,7 +1,8 @@
 /// @desc The full screen text
 
 draw_set_color(COLOR_WHITE)
-draw_set_alpha(ease_out_sine(0, 1, progress))
+if (room != rm_init || instance_exists(obj_init))
+    draw_set_alpha(ease_out_sine(0, 1, progress))
 draw_rectangle(0, 0, room_width, room_height, 0)
 draw_set_alpha(1)
 
