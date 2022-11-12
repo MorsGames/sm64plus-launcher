@@ -445,6 +445,7 @@ function ini_save_item(_item, _category) {
 		case option_type.green_demon_mode:
 		case option_type.blj_everywhere:
 		case option_type.lod:
+		case option_type.frame_rate:
 		case option_type.palette:
 		case option_type.fixes:
 		case option_type.draw_distance:
