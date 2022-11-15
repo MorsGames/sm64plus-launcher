@@ -27,11 +27,12 @@ backgrounds_no = 8;
 
 background_index = choose(1, 2, 3, 4);
 change_background = function(new_index) {
-	background_alpha = 0;
 	background_index_last = background_index;
 	background_index = new_index % backgrounds_no;
 	if (background_index < 0)
 		background_index = backgrounds_no-background_index-1;
+    if (background_index != background_index_last)
+	    background_alpha = 0;
 }
 change_background(background_index);
 background_alpha = 1;

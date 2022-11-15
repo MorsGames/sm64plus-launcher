@@ -22,7 +22,7 @@ run_game = function() {
 music_play(snd_music)
 	
 bop = function() {
-	if (!global.mute)
+	if (!global.mute_music)
 		scale = 0.5;	
 }
 

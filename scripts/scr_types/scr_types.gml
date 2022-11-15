@@ -29,7 +29,10 @@ enum option_type {
 	palette,
 	fixes,
 	draw_distance,
-    controller_button
+    controller_button,
+    window_size,
+    launcher_width,
+    launcher_height
 }
 
 // Replace the constants in the json file
@@ -66,6 +69,9 @@ function replace_json_constants(_contents) {
 	_contents = string_replace_all(_contents, "TYPE_FIXES", "24");
 	_contents = string_replace_all(_contents, "TYPE_DRAW_DISTANCE", "25");
 	_contents = string_replace_all(_contents, "TYPE_CONTROLLER_BUTTON", "26");
+	_contents = string_replace_all(_contents, "TYPE_WINDOW_SIZE", "27");
+	_contents = string_replace_all(_contents, "TYPE_LAUNCHER_WIDTH", "28");
+	_contents = string_replace_all(_contents, "TYPE_LAUNCHER_HEIGHT", "29");
 
 	return _contents;
 }
@@ -85,9 +91,12 @@ function get_option_text(option) {
 		case option_type.boolean:
 		    return _name + (_state ? ":✔On" : ":❌Off");
 		    break;
-		case option_type.uint: 
-		case option_type.float: 
-		case option_type.monitor: 
+		case option_type.uint:
+		case option_type.float:
+		case option_type.monitor:
+		case option_type.window_size:
+		case option_type.launcher_width:
+		case option_type.launcher_height:
 		    return _name + ":❓" + string(_state);
 		    break;
 		case option_type.key: 
@@ -401,6 +410,9 @@ function ini_load_item(_item, _category) {
 		case option_type.fixes:
 		case option_type.draw_distance:
         case option_type.controller_button:
+		case option_type.window_size:
+        case option_type.launcher_width:
+        case option_type.launcher_height:
 			_item.state = ini_read_real(_category.title, _item.internal_name, 0);
 			break;
 		case option_type.mouse_button:
@@ -450,6 +462,9 @@ function ini_save_item(_item, _category) {
 		case option_type.fixes:
 		case option_type.draw_distance:
         case option_type.controller_button:
+		case option_type.window_size:
+        case option_type.launcher_width:
+        case option_type.launcher_height:
 			ini_write_real(_category.title, _item.internal_name, _item.state);
 			break;
 		case option_type.mouse_button:
@@ -526,7 +541,11 @@ function change_option_state(_option, _hor_movement, _long_hor_movement) {
 			_option.state = clamp(_option.state + (_hor_movement + wait(2)*_long_hor_movement)/20, 0, 1);
 			break;
 		case option_type.monitor:
-			_option.state = clamp(_option.state + _hor_movement + wait(4)*_long_hor_movement, 1, 10);
+        	var _keyboard_value = get_digits(keyboard_string);
+			if (_keyboard_value != "")
+				_option.state = clamp(_keyboard_value, 1, 10);
+			else
+			    _option.state = clamp(_option.state + _hor_movement + wait(4)*_long_hor_movement, 1, 10);
 			break;
 		case option_type.frame_rate:
 			_option.state = clamp(_option.state + _hor_movement + wait(4)*_long_hor_movement, 0, 1);
@@ -536,6 +555,27 @@ function change_option_state(_option, _hor_movement, _long_hor_movement) {
 			break;
 		case option_type.draw_distance:
 			_option.state = max(0, _option.state + (_hor_movement + wait(4)*_long_hor_movement * 2)/2);
+			break;
+		case option_type.window_size:
+			var _keyboard_value = get_digits(keyboard_string);
+			if (_keyboard_value != "")
+				_option.state = max(1, _keyboard_value);
+			else
+				_option.state = max(1, _option.state + _hor_movement + _long_hor_movement * 3);
+			break;
+        case option_type.launcher_width:
+			var _keyboard_value = get_digits(keyboard_string);
+			if (_keyboard_value != "")
+				_option.state = max(MIN_WIDTH, _keyboard_value);
+			else
+				_option.state = max(_option.state + _hor_movement + _long_hor_movement * 3, MIN_WIDTH);
+			break;
+        case option_type.launcher_height:
+			var _keyboard_value = get_digits(keyboard_string);
+			if (_keyboard_value != "")
+				_option.state = max(MIN_HEIGHT, _keyboard_value);
+			else
+				_option.state = max(_option.state + _hor_movement + _long_hor_movement * 3, MIN_HEIGHT);
 			break;
 	}	
 }
@@ -650,6 +690,24 @@ function get_option_limit(_option) {
                 return option_limit.right;
             else if (_state >= 11)
                 return option_limit.left;
+            else
+                return option_limit.both;
+                
+		case option_type.window_size:
+            if (_state <= 1)
+                return option_limit.right;
+            else
+                return option_limit.both;
+                
+        case option_type.launcher_width:
+            if (_state <= MIN_WIDTH)
+                return option_limit.right;
+            else
+                return option_limit.both;
+                
+        case option_type.launcher_height:
+            if (_state <= MIN_HEIGHT)
+                return option_limit.right;
             else
                 return option_limit.both;
                 

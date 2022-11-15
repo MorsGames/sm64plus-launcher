@@ -11,6 +11,10 @@ var _size = 1.125*view_hport[0]/720;
 var _x = -current_frames*0.75*_size;
 var _y = (sin(current_frames/1024*pi)*16+8-24*(os_type != os_windows))*_size*1.75;
 
+if (os_type != os_windows) {
+    draw_clear(c_ltgray);   
+}
+
 var _last_bg = backgrounds[background_index_last];
 var _bg = backgrounds[background_index];
 
@@ -29,7 +33,7 @@ if (background_alpha > 0) {
 		gpu_set_tex_filter(0);
 	draw_sprite_tiled_ext(_bg, 0, _x, _y, 4*_size, 3*_size, c_white, background_alpha);
 	if (_bg == spr_void) {
-		draw_sprite_tiled_ext(_bg, 1, _x*1.5, _y*1.5, 4*_size, 3*_size, c_white, background_alpha*0.5);
+		draw_sprite_tiled_ext(_bg, 1, _x*1.5, _y*1.5, 4*_size, 3*_size, c_white, background_alpha * 0.5);
 		gpu_set_tex_filter(1);
 	}
 }

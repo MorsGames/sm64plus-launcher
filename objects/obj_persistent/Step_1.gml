@@ -27,20 +27,39 @@ else {
 	}
 	if (keyboard_check_pressed(ord("M"))) {
         
-        set_mute(!global.mute);
+        set_mute(global.mute_sounds, !global.mute_music);
 		
 		sfx_play(snd_select)
 
 		ini_open(INI2_PATH)
-		ini_write_real("LAUNCHER", "mute", global.mute)
+		ini_write_real("LAUNCHER", "mute_music", global.mute_music)
 		ini_close()	
                 
         for (var j=0; j<array_length(global.launcher_category.items); j++) {
 			
 			var _item = global.launcher_category.items[j];
 			
-			if (_item.internal_name == "mute")
-				_item.state = global.mute;
+			if (_item.internal_name == "mute_music")
+				_item.state = global.mute_music;
+		}
+	}
+    
+    if (keyboard_check_pressed(ord("S"))) {
+        
+        set_mute(!global.mute_sounds, global.mute_music);
+		
+		sfx_play(snd_select)
+
+		ini_open(INI2_PATH)
+		ini_write_real("LAUNCHER", "mute_sounds", global.mute_sounds)
+		ini_close()	
+                
+        for (var j=0; j<array_length(global.launcher_category.items); j++) {
+			
+			var _item = global.launcher_category.items[j];
+			
+			if (_item.internal_name == "mute_sounds")
+				_item.state = global.mute_sounds;
 		}
 	}
 }

@@ -27,13 +27,15 @@ if (state == 0) {
 				"To do so, download and install the 64-bit version of MSYS2 first. It's recommended to install it to its default location. Installing MSYS2 to any drive other than C might cause issues.\n\n" +
 				"You can press <SPACE> to go to the download page of it.\n\n" +
 				(external_enabled ? "Once you're done, you can press <ENTER> to continue." : "Press <ENTER> to continue.\n\n= Custom texture support has been disabled! ="))
-				: ("Welp, this is awkward.\n\nIt seems like you don't have the game built yet!\n" + 
-				"Don't worry, you will need to use the terminal a bit, but it's not too hard otherwise.\n\nPress any key to open the instructions about how to build.")
+				: ("Hello there! Before starting, we first need to build the game itself.\n\n" + 
+                "The process here involves a bit of terminal usage, so I hope you're comfortable with that.\n" + 
+				"It is not very hard though, all you need to do is to follow the instructions.\n\n" + 
+                "Press any key to open the instructions.")
 	}
 }
 else if (state == 1) {
 	if (CURRENT_OS != os_windows) && (input_check_pressed(key.any)) {
-		url_open("https://github.com/MorsGames/sm64plus/blob/master/README.md")	
+		url_open("https://github.com/MorsGames/sm64plus/wiki/Manual-Building-Guide")	
 		game_end();
 	}
 	else if (keyboard_check_pressed(vk_space))

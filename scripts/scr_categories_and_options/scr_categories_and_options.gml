@@ -268,17 +268,29 @@ function set_fullscreen(fullscreen) {
     window_set_cursor(global.fullscreen ? cr_none : cr_default);
 }
 
-function set_mute(mute) {
+function set_mute(mute_sounds, mute_music) {
     
-    global.mute = mute;
+    global.mute_sounds = mute_sounds;
+    global.mute_music = mute_music;
     
 	if (room != rm_init) {
         
-		if (global.mute)
+		if (global.mute_music)
 			audio_stop_sound(snd_music)
 		else
 			music_play(snd_music)
 	}
+}
+
+function set_window_size(window_width, window_height) {
+    
+    if (global.window_width == window_width && global.window_height == window_height)
+        exit;
+    
+    global.window_width = window_width;
+    global.window_height = window_height;
+		
+    window_set_size(global.window_width, global.window_height);
 }
 
 // Load the settings for the launcher
@@ -294,11 +306,13 @@ function load_launcher_settings() {
     }
     
     set_fullscreen(ini_read_string("LAUNCHER", "fullscreen", "false") == "true");
-    set_mute(ini_read_string("LAUNCHER", "mute", "false") == "true");
+    set_mute(ini_read_string("LAUNCHER", "mute_sounds", "false") == "true", ini_read_string("LAUNCHER", "mute_music", "false") == "true");
     
     global.scaling_mode = ini_read_real("LAUNCHER", "scaling_mode", 1);
     global.quick_launch = ini_read_string("LAUNCHER", "quick_launch", "false") == "true";
     global.close_on_launch = ini_read_string("LAUNCHER", "close_on_launch", "false") == "true";
+    
+    set_window_size(ini_read_real("LAUNCHER", "window_width", 1280), ini_read_real("LAUNCHER", "window_height", 720));
 }
 
 // Saves the settings

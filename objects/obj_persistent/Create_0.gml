@@ -38,8 +38,8 @@ input_action_add(key.page_right, -2, gp_shoulderr)
 
 input_action_add(key.select, vk_space, gp_face1)
 input_action_add(key.select2, vk_enter, gp_start)
-input_action_add(key.back, vk_escape, gp_face2)
-input_action_add(key.del, vk_backspace, gp_select)
+input_action_add(key.back, CURRENT_OS == os_windows ? vk_escape : vk_backspace, gp_face2)
+input_action_add(key.del, CURRENT_OS == os_windows ? vk_backspace : vk_delete, gp_select)
 input_action_add(key.del2, vk_delete, gp_select)
 
 input_action_add(key.any, vk_anykey, gp_anybutton)
@@ -57,27 +57,46 @@ input_system_start()
 // We are drawing the surface manually just in case
 application_surface_draw_enable(false);
 
-// Set the window size
-window_set_size(1280, 720);
-
 // LAUNCHER SETTINGS STUFF
 
 // Load the json to memory
-var _launcher_file = file_text_open_read(LAUNCHER_CATEGORY_PATH);
-var _launcher_contents = "";
+if (file_exists(LAUNCHER_CATEGORY_PATH)) {
+    
+    var _launcher_file = file_text_open_read(LAUNCHER_CATEGORY_PATH);
+    var _launcher_contents = "";
 
-while (!file_text_eof(_launcher_file)) {
-	_launcher_contents += file_text_readln(_launcher_file);
+    while (!file_text_eof(_launcher_file)) {
+    	_launcher_contents += file_text_readln(_launcher_file);
+    }
+    file_text_close(_launcher_file);
+
+    // Replace the constants
+    _launcher_contents = replace_json_constants(_launcher_contents);
+
+    // Parse the result
+    global.launcher_category = json_parse(_launcher_contents);
+
+    // Set the window size
+    global.window_width = -1;
+    global.window_height = -1;
+    load_launcher_settings();
 }
-file_text_close(_launcher_file);
+else {
+    global.launcher_category = -1;
+    
+    global.fullscreen = false;
+    global.mute_music = false;
+    global.mute_sounds = false;
+    
+    global.scaling_mode = 1;
+    global.quick_launch = false;
+    global.close_on_launch = false;
+    
+    global.window_width = 1280;
+    global.window_height = 720;
+}
 
-// Replace the constants
-_launcher_contents = replace_json_constants(_launcher_contents);
-
-// Parse the result
-global.launcher_category = json_parse(_launcher_contents);
-
-load_launcher_settings();
+window_set_size(global.window_width, global.window_height);
 
 if (!global.fullscreen)
 	timer(window_center, 1);

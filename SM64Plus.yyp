@@ -84,6 +84,8 @@
     {"resourceType":"GMIncludedFile","resourceVersion":"1.0","name":"rebuild.sh","CopyToMask":64,"filePath":"datafiles",},
     {"resourceType":"GMIncludedFile","resourceVersion":"1.0","name":"rebuild_clean.sh","CopyToMask":64,"filePath":"datafiles",},
     {"resourceType":"GMIncludedFile","resourceVersion":"1.0","name":"lib64Plus.dll","CopyToMask":-1,"filePath":"datafiles",},
+    {"resourceType":"GMIncludedFile","resourceVersion":"1.0","name":"lib64Plus_x64.so","CopyToMask":-1,"filePath":"datafiles",},
+    {"resourceType":"GMIncludedFile","resourceVersion":"1.0","name":"lib64Plus_arm64.so","CopyToMask":-1,"filePath":"datafiles",},
   ],
   "MetaData": {
     "IDEVersion": "2022.8.1.37",

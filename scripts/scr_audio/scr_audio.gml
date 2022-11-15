@@ -3,7 +3,7 @@
 function sfx_play(sound) {
 	
 	// Ignore if the game is muted
-	if (global.mute)
+	if (global.mute_sounds)
 		exit;
 		
 	// Always only play a single instance of the sound effects
@@ -15,7 +15,7 @@ function sfx_play(sound) {
 function music_play(music) {
 	
 	// Ignore if the game is muted
-	if (global.mute)
+	if (global.mute_music)
 		exit;
 		
 	// Don't play if it's already playing

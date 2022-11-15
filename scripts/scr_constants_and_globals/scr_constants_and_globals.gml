@@ -1,21 +1,23 @@
 #macro DEBUG debug_mode
 
-#macro PATH (DEBUG ? (global.debug_path + @"\") : (program_directory + @"\sm64plus\"))
-#macro GFX_PATH (PATH + @"textures\")
-#macro GAME_PATH (PATH + @"build\us_pc\")
-#macro CATEGORIES_PATH (PATH + @"launcher\categories.json")
-#macro LAUNCHER_CATEGORY_PATH (PATH + @"launcher\launcher_settings.json")
+#macro ARM true
+
+#macro PATH (DEBUG ? (global.debug_path + @"/") : (program_directory + @"/sm64plus/"))
+#macro GFX_PATH (PATH + @"textures/")
+#macro GAME_PATH (PATH + @"build/us_pc/")
+#macro CATEGORIES_PATH (PATH + @"launcher/categories.json")
+#macro LAUNCHER_CATEGORY_PATH (PATH + @"launcher/launcher_settings.json")
 #macro GAME_EXE ((CURRENT_OS == os_windows) ? "sm64.us.exe" : "sm64.us")
 #macro GAME_EXE_OLD ((CURRENT_OS == os_windows) ? "sm64.us.f3dex2e.exe" : "sm64.us.f3dex2e")
 #macro INI_PATH (working_directory + @"settings.ini")
 #macro INI2_PATH (working_directory + @"launcher_settings.ini")
-#macro PRESETS_PATH (working_directory + @"presets\")
-#macro INTERNAL_PRESETS_PATH PATH + (@"launcher\presets\")
+#macro PRESETS_PATH (working_directory + @"presets/")
+#macro INTERNAL_PRESETS_PATH PATH + (@"launcher/presets/")
 #macro EXTERNAL_PATH (working_directory + @"gfx")
-#macro EXTERNAL_PATH_ORIGINAL (PATH + @"build\us_pc\gfx")
+#macro EXTERNAL_PATH_ORIGINAL (PATH + @"build/us_pc/gfx")
 #macro VERSION_FILE_PATH (PATH + @"VERSION")
 
-#macro VERSION "v3.0.0 DEV"
+#macro VERSION "v3.0.0"
 
 #macro MIN_WIDTH 512
 #macro MIN_HEIGHT 240

@@ -14,9 +14,9 @@ launch_game = function() {
 	if (directory_exists(EXTERNAL_PATH_ORIGINAL))
 		copy_dir(EXTERNAL_PATH_ORIGINAL, EXTERNAL_PATH);
 	if (file_exists(GAME_PATH + GAME_EXE))
-		execute_program(GAME_PATH + GAME_EXE, "", !global.close_on_launch)
+		execute_shell(GAME_PATH + GAME_EXE, "", !global.close_on_launch)
 	if (file_exists(GAME_PATH + GAME_EXE_OLD))
-		execute_program(GAME_PATH + GAME_EXE_OLD, "", !global.close_on_launch)
+		execute_shell(GAME_PATH + GAME_EXE_OLD, "", !global.close_on_launch)
         
     if (room == rm_init)
         instance_destroy(obj_init);
