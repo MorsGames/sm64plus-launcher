@@ -284,6 +284,11 @@ function set_mute(mute_sounds, mute_music) {
 
 function set_window_size(window_width, window_height) {
     
+    if (window_width < MIN_WIDTH)
+        window_width = MIN_WIDTH;
+    if (window_height < MIN_HEIGHT)
+        window_height = MIN_HEIGHT;
+    
     if (global.window_width == window_width && global.window_height == window_height)
         exit;
     

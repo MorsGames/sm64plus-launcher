@@ -1,6 +1,6 @@
 #macro DEBUG debug_mode
 
-#macro ARM true
+#macro ARM false
 
 #macro PATH (DEBUG ? (global.debug_path + @"/") : (program_directory + @"/sm64plus/"))
 #macro GFX_PATH (PATH + @"textures/")
@@ -11,6 +11,7 @@
 #macro GAME_EXE_OLD ((CURRENT_OS == os_windows) ? "sm64.us.f3dex2e.exe" : "sm64.us.f3dex2e")
 #macro INI_PATH (working_directory + @"settings.ini")
 #macro INI2_PATH (working_directory + @"launcher_settings.ini")
+#macro INI3_PATH (working_directory + @"launcher_config.ini")
 #macro PRESETS_PATH (working_directory + @"presets/")
 #macro INTERNAL_PRESETS_PATH PATH + (@"launcher/presets/")
 #macro EXTERNAL_PATH (working_directory + @"gfx")

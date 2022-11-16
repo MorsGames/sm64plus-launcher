@@ -32,6 +32,10 @@ check_file = function(play_sound) {
 			state = 3
 			
 			start_file_checks();
+            
+        	ini_open(INI3_PATH);
+        	ini_write_string("LAUNCHER", "version", VERSION);
+        	ini_close();
 			
 			update = false;
 			
@@ -68,21 +72,19 @@ update = false;
 // The messages to show people if the game is indeed not built
 str = "- DISCLAIMER -\n\nWhat you have right here is a non-profit fan project, and NOT an official Nintendo product. If you like what you're seeing here, please show your support to Nintendo directly!\n\nPress any key to continue.";
 
-if (!file_exists(INI2_PATH)) {
-	ini_open(INI2_PATH);
+if (!file_exists(INI3_PATH)) {
+	ini_open(INI3_PATH);
 	ini_write_string("LAUNCHER", "version", VERSION);
 	ini_close();
 }
 else if (file_exists(GAME_PATH + GAME_EXE) || file_exists(GAME_PATH + GAME_EXE_OLD)) {
 	var _cur_ver = VERSION;
-	ini_open(INI2_PATH);
+	ini_open(INI3_PATH);
 	_cur_ver = ini_read_string("LAUNCHER", "version", VERSION);
 
 	if (_cur_ver != VERSION) {
 		
 		str = "- A LAUNCHER UPDATE HAS BEEN DETECTED -\n\nThe launcher will now update the game files.\n\nPress any key to update.\nPress " + input_action_get_name(key.del, 1)  + " to skip.\n\nPS: You can later do this manually by choosing \"Update\" from the main menu."
-	
-		ini_write_string("LAUNCHER", "version", VERSION);
 		
 		update = true;
 	}

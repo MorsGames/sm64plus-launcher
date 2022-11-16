@@ -411,9 +411,13 @@ function ini_load_item(_item, _category) {
 		case option_type.draw_distance:
         case option_type.controller_button:
 		case option_type.window_size:
-        case option_type.launcher_width:
-        case option_type.launcher_height:
 			_item.state = ini_read_real(_category.title, _item.internal_name, 0);
+			break;
+        case option_type.launcher_width:
+			_item.state = ini_read_real(_category.title, _item.internal_name, 1280);
+			break;
+        case option_type.launcher_height:
+			_item.state = ini_read_real(_category.title, _item.internal_name, 720);
 			break;
 		case option_type.mouse_button:
 			var _value = ini_read_real(_category.title, _item.internal_name, 0);
