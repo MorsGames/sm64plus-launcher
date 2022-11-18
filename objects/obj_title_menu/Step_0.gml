@@ -28,7 +28,7 @@ if (move == 2) {
 				        break;
 				    case 1:
 				    case 2:
-						ini_open(INI2_PATH)
+						ini_open(INI3_PATH)
 						var _external = ini_read_real("GAME", "custom_textures", 1);
 						
 						if (input_check(key.del)) {

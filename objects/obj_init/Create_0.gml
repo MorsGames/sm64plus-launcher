@@ -6,11 +6,11 @@ if (!instance_exists(obj_persistent))
 	instance_create_depth(0, 0, -100, obj_persistent);
 	
 start_file_checks = function() {
-	timer(check_file, 90, true, true);
+	timer(check_file, 90, true, true, true);
 	timer_ms(change_text, 7200000);	
 }
 
-check_file = function(play_sound) {
+check_file = function(play_sound, reload_launcher_settings = false) {
 	if (file_exists(GAME_PATH + GAME_EXE) || file_exists(GAME_PATH + GAME_EXE_OLD)) {
 		
 		// Update the game
@@ -19,7 +19,7 @@ check_file = function(play_sound) {
 			file_delete(GAME_PATH + GAME_EXE);
 			file_delete(GAME_PATH + GAME_EXE_OLD);
 			
-			ini_open(INI2_PATH);
+			ini_open(INI3_PATH);
 			var _external = ini_read_real("GAME", "custom_textures", 1);
 			ini_close();
 			
@@ -51,6 +51,10 @@ check_file = function(play_sound) {
         }
         else
 		    slide_out = 1;
+            
+        if (reload_launcher_settings)
+            load_launcher_settings();
+            
 		var _snd = play_sound ? snd_start : snd_select;
 		if (!audio_is_playing(_snd))
 			sfx_play(_snd)
@@ -61,6 +65,23 @@ check_file = function(play_sound) {
 
 change_text = function() {
 	str = "It seems like an error has occured. Try restarting the launcher and building again.";
+}
+
+start_building = function() {
+ 	if (directory_exists(EXTERNAL_PATH)) {
+		directory_destroy(EXTERNAL_PATH);
+	}
+			
+	// Make the ini file know that yes, external textures are enabled
+	ini_open(INI3_PATH)
+	ini_write_real("GAME", "custom_textures", external_enabled)
+	ini_close()
+			
+	var _mingw_path = @"C:\msys64\mingw64.exe";
+	if (!file_exists(_mingw_path))
+		_mingw_path = get_open_filename("Find mingw64.exe in your MSYS2 installation folder.|mingw64.exe", "");
+	execute_shell_admin(_mingw_path, "\\\"" + program_directory + "build.sh\\\" " + string(external_enabled));
+	start_file_checks();   
 }
 
 state = 0;
