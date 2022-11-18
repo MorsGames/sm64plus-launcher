@@ -52,8 +52,10 @@ check_file = function(play_sound, reload_launcher_settings = false) {
         else
 		    slide_out = 1;
             
-        if (reload_launcher_settings)
+        if (reload_launcher_settings) {
+            load_launcher_file();
             load_launcher_settings();
+        }
             
 		var _snd = play_sound ? snd_start : snd_select;
 		if (!audio_is_playing(_snd))

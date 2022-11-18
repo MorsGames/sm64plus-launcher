@@ -62,23 +62,7 @@ application_surface_draw_enable(false);
 // Load the json to memory
 if (file_exists(LAUNCHER_CATEGORY_PATH)) {
     
-    var _launcher_file = file_text_open_read(LAUNCHER_CATEGORY_PATH);
-    var _launcher_contents = "";
-
-    while (!file_text_eof(_launcher_file)) {
-    	_launcher_contents += file_text_readln(_launcher_file);
-    }
-    file_text_close(_launcher_file);
-
-    // Replace the constants
-    _launcher_contents = replace_json_constants(_launcher_contents);
-
-    // Parse the result
-    global.launcher_category = json_parse(_launcher_contents);
-
-    // Set the window size
-    global.window_width = -1;
-    global.window_height = -1;
+    load_launcher_file();
     load_launcher_settings();
 }
 else {
