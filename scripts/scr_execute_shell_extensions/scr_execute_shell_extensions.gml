@@ -5,7 +5,7 @@ if (CURRENT_OS == os_windows) {
 else {
     var _library = ARM ? "lib64Plus_arm64.so" : "lib64Plus_x64.so";
     global.__lib64Plus_execute = external_define(_library, "execute", dll_cdecl, ty_real, 1, ty_string);
-    global.__lib64Plus_execute_wait = external_define(_library, "execute", dll_cdecl, ty_real, 1, ty_string);
+    global.__lib64Plus_execute_wait = external_define(_library, "execute_wait", dll_cdecl, ty_real, 1, ty_string);
 }
 
 function execute_shell(prog, arg, _wait = false) {
