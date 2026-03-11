@@ -34,5 +34,5 @@ ds_list_destroy(_list);
 
 
 draw_set_valign(fa_middle)
-draw_text_custom(_x, _y2, "Hold the controller buttons you want to this action assign to for " + string(ceil(counter/60)) + " seconds.\n\n" + _str, 2)
+draw_text_custom(_x, _y2, "Hold the controller buttons you want to assign to this action for " + string(button_value == 0 ? 3 : (ceil(counter/60))) + " seconds.\n\n" + _str, 2)
 draw_set_valign(fa_top)

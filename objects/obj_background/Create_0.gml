@@ -21,16 +21,22 @@ backgrounds = [
             _add("skyboxes\\bitfs"),
             _add("skyboxes\\bits"),
             spr_void,
+            spr_void,
             _add("inside\\inside_castle_textures.03000.rgba16")];
             
 backgrounds_no = 8;
 
-background_index = choose(1, 2, 3, 4);
+background_index = 0;
 change_background = function(new_index) {
 	background_index_last = background_index;
-	background_index = new_index % backgrounds_no;
-	if (background_index < 0)
-		background_index = backgrounds_no-background_index-1;
+	
+    if (new_index < 0) {
+        background_index = clamp(backgrounds_no - new_index - 1, 0, array_length(backgrounds) - 1);
+    }
+    else {
+	    background_index = new_index % backgrounds_no;
+    }
+    
     if (background_index != background_index_last)
 	    background_alpha = 0;
 }
@@ -41,6 +47,10 @@ message_timer = 0;
 message_text = "";
 message_position = 0;
 message_move = 0;
+
+top_text_delay = 30;
+text_transition_counter = 0;
+text_transition_speed = 0.025;
 
 display_message = function(msg) {
 	message_text = msg;

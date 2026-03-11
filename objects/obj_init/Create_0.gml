@@ -14,7 +14,7 @@ check_file = function(play_sound, reload_launcher_settings = false) {
 	if (file_exists(GAME_PATH + GAME_EXE) || file_exists(GAME_PATH + GAME_EXE_OLD)) {
 		
 		// Update the game
-		if (update && !input_check(key.del)) {
+		if (update && !input_check(input.del)) {
 			
 			file_delete(GAME_PATH + GAME_EXE);
 			file_delete(GAME_PATH + GAME_EXE_OLD);
@@ -45,7 +45,7 @@ check_file = function(play_sound, reload_launcher_settings = false) {
 		// Cancel the update process if no exe
 		update = false;
 		
-        if (global.quick_launch && !input_check_pressed(key.del)) {
+        if (global.quick_launch && !input_check_pressed(input.del)) {
             instance_create_depth(0, 0, depth-1, obj_start_game);
             play_sound = true;
         }
@@ -93,7 +93,7 @@ external_enabled = false;
 update = false;
 
 // The messages to show people if the game is indeed not built
-str = "- DISCLAIMER -\n\nWhat you have right here is a non-profit fan project, and NOT an official Nintendo product. If you like what you're seeing here, please show your support to Nintendo directly!\n\nPress any key to continue.";
+str = "- DISCLAIMER -\n\nThis is a non-profit fan project, and NOT an official Nintendo product. If you like what you're seeing here, please show your support to Nintendo directly!\n\nPress any key to continue.";
 
 if (!file_exists(INI3_PATH)) {
 	ini_open(INI3_PATH);
@@ -107,7 +107,7 @@ else if (file_exists(GAME_PATH + GAME_EXE) || file_exists(GAME_PATH + GAME_EXE_O
 
 	if (_cur_ver != VERSION) {
 		
-		str = "- A LAUNCHER UPDATE HAS BEEN DETECTED -\n\nThe launcher will now update the game files.\n\nPress any key to update.\nPress " + input_action_get_name(key.del, 1)  + " to skip.\n\nPS: You can later do this manually by choosing \"Update\" from the main menu."
+		str = "- A LAUNCHER UPDATE HAS BEEN DETECTED -\n\nThe launcher will now update the game files.\n\nPress any key to update.\nPress " + input_action_get_name(input.del, 1)  + " to skip.\n\nPS: You can later do this manually by choosing \"Update\" from the main menu."
 		
 		update = true;
 	}

@@ -1,5 +1,5 @@
-if (slide_out) {
-	
+if (slide_out)
+{	
 	if (progress > 0)
 		progress -= 0.03125
 	else {
@@ -7,25 +7,19 @@ if (slide_out) {
 		instance_destroy();
 	}
 }
-else {
-	
+else
+{	
 	if (progress < 1)
 		progress += 0.03125
         
-    var _button_list = gamepad_get_buttons();
+    button_value = controller_poll_sdl();
     
-    button_value = 0;
-        
-    for (var i = 0; i < ds_list_size(_button_list); i++) {
-		button_value |= controller_button_to_enum(_button_list[| i]);
-	}
-    
-    show_debug_message(button_value)
-    
-    ds_list_destroy(_button_list);
+	if (button_value == 0)
+		counter = 120;
 
-    if (input_check_pressed(key.back) && button_value == 0) {
+    if (input_check_pressed(input.back) && button_value == 0) {
 		slide_out = true;
+        item.state = 0;
 		sfx_play(snd_cancel)
 	}
     else if (keyboard_check_pressed(vk_anykey)) {

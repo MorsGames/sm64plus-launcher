@@ -6,6 +6,7 @@ Originally I intended to release the source code for it at SM64Plus's initial la
 
 This never happened, so I'm releasing the code as is. There are a lot of improvements that can be made with the code at places, but it gets the job done well regardless.
 
+
 ## Why GameMaker?
 
 I could build all the functionality of the launcher directly into the game, but I chose to go with GameMaker for a few reasons:
@@ -13,6 +14,7 @@ I could build all the functionality of the launcher directly into the game, but 
 - GameMaker is an engine I've been using for years, and it's what I'm most familiar with.
 - Using C/C++ and building most of the launcher functionality directly into the game would take way too long, more than I could afford dedicating into a project like this.
 - Using something like MonoGame would still take longer, but it would also introduce .NET as a dependency.
+
 
 ## Cons of GameMaker
 
@@ -25,9 +27,6 @@ Using GameMaker paid off in the sense that it saved me a lot of time I would hav
 
 All of these issues (except the last) could be solved with a custom C/C++ extension, but this is not something I have the time to look into at the moment. If anyone wants to help on this aspect, please let me know.
 
-## Linux Version?
-
-As mentioned earlier, having a dependency on a marketplace extension prevents me from releasing a functional Linux version of the launcher. Once I solve that issue the Linux launcher will be available. This is also the reason why the Windows launcher is compiled for 32-bit as opposed to 64-bit.
 
 ## How to Compile (On Windows)
 
@@ -52,6 +51,7 @@ As mentioned earlier, having a dependency on a marketplace extension prevents me
 
 - #### Step 6:
     Run the launcher again the same way, and voila!
+
 
 ## More
 

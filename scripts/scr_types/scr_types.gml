@@ -32,7 +32,81 @@ enum option_type {
     controller_button,
     window_size,
     launcher_width,
-    launcher_height
+    launcher_height,
+    internal_resolution,
+	antialiasing,
+	anisotropic,
+	aspect_ratio,
+	display_mode
+}
+
+global.display_mode_cache = [];
+
+function get_display_mode_display_index(_category = undefined) {
+	if (is_struct(_category)) {
+		for (var i = 0; i < array_length(_category.items); i++) {
+			if (_category.items[i].type == option_type.monitor) {
+				return max(0, floor(_category.items[i].state) - 1);
+			}
+		}
+	}
+
+	return 0;
+}
+
+function get_display_mode_values(_category = undefined) {
+	var _display_count = floor(display_mode_get_display_count_sdl());
+	var _display_index = get_display_mode_display_index(_category);
+
+	if (_display_count <= 0) {
+		return [];
+	}
+
+	_display_index = clamp(_display_index, 0, _display_count - 1);
+
+	if (_display_index < array_length(global.display_mode_cache)) {
+		var _cached = global.display_mode_cache[_display_index];
+		if (is_array(_cached)) {
+			return _cached;
+		}
+	}
+
+	var _values = [];
+	var _count = floor(display_mode_get_count_sdl(_display_index));
+	for (var i = 0; i < _count; i++) {
+		var _value = display_mode_get_value_sdl(_display_index, i);
+		if (_value != "") {
+			array_push(_values, _value);
+		}
+	}
+
+	while (array_length(global.display_mode_cache) <= _display_index) {
+		array_push(global.display_mode_cache, undefined);
+	}
+
+	global.display_mode_cache[_display_index] = _values;
+	return _values;
+}
+
+function get_display_mode_label(_value) {
+	if (is_undefined(_value) || _value == "") {
+		return "Unavailable";
+	}
+
+	var _value_str = string(_value);
+	var _separator = string_pos("@", _value_str);
+	if (_separator <= 0) {
+		return _value_str;
+	}
+
+	var _resolution = string_copy(_value_str, 1, _separator - 1);
+	var _refresh = real(string_copy(_value_str, _separator + 1, string_length(_value_str) - _separator));
+
+	if (_refresh <= 0) {
+		return _resolution;
+	}
+
+	return _resolution + " @ " + string(floor(_refresh)) + " Hz";
 }
 
 // Replace the constants in the json file
@@ -72,12 +146,17 @@ function replace_json_constants(_contents) {
 	_contents = string_replace_all(_contents, "TYPE_WINDOW_SIZE", "27");
 	_contents = string_replace_all(_contents, "TYPE_LAUNCHER_WIDTH", "28");
 	_contents = string_replace_all(_contents, "TYPE_LAUNCHER_HEIGHT", "29");
+	_contents = string_replace_all(_contents, "TYPE_INTERNAL_RESOLUTION", "30");
+	_contents = string_replace_all(_contents, "TYPE_ANTIALIASING", "31");
+	_contents = string_replace_all(_contents, "TYPE_ANISOTROPIC", "32");
+	_contents = string_replace_all(_contents, "TYPE_ASPECT_RATIO", "33");
+	_contents = string_replace_all(_contents, "TYPE_DISPLAY_MODE", "34");
 
 	return _contents;
 }
 
 // Get the display text for the option
-function get_option_text(option) {
+function get_option_text(option, _category = undefined) {
 	var _name = option.name;
 	var _type = option.type;
     try {
@@ -100,22 +179,15 @@ function get_option_text(option) {
 		    return _name + ":❓" + string(_state);
 		    break;
 		case option_type.key: 
-			var _text;
+			var _text = keyboard_get_scan_name(_state);
 			
-			if (_state == 0)
-				_text = "❌None"
-			else if (_state == 328)
-				_text = "❓Up"
-			else if (_state == 336)
-				_text = "❓Down"
-			else if (_state == 331)
-				_text = "❓Left"
-			else if (_state == 333)
-				_text = "❓Right"
-			else if (_state > array_length(global.key_names))
-				_text = "❌Unknown"
+			if (_text == "None")
+				_text = "❌" + _text;
+			else if (_text == "Unknown")
+				_text = "❌" + _text;
 			else
-				_text = "❓" + global.key_names[_state-1];
+				_text = "❓" + _text;
+				
 		    return _name + ":" + _text + " [" + string(_state) + "]";
 		    break;
 		case option_type.star_message: 
@@ -242,14 +314,12 @@ function get_option_text(option) {
 			}
 			break;
 		case option_type.texture_filtering: 
-		    switch (_state) {
-				case 0:
-					return _name + ":❌Nearest Neighbor";
-				case 1:
-					return _name + ":❓3 Point";
-				case 2:
-					return _name + ":❓Bilinear";
-			}
+		    if (_state > 0)
+		        return _name + ":❓Bilinear";
+		    else if (_state < 0)
+		        return _name + ":❌Nearest Neighbor";
+		    else
+		        return _name + ":❓3 Point";
 		    break;
 		case option_type.moon_jump: 
 		    switch (_state) {
@@ -337,20 +407,20 @@ function get_option_text(option) {
 			}
 		    break;
 		case option_type.fixes: 
-		    switch (_state) {
-				case 0:
-					return _name + ":❌None";
-				case 1:
-					return _name + ":❓Gameplay";
-				case 2:
-					return _name + ":✔Gameplay + Collisions";
-			}
+		    if (_state <= 0)
+		        return _name + ":❌None";
+			else if (_state == 1)
+				return _name + ":✔Only Simple Ones";
+		    else if (_state == 2)
+		        return _name + ":✔Including Collisions";
+		    else if (_state >= 3)
+		        return _name + ":❓Including Exploits";
 		    break;
 		case option_type.draw_distance:
 			if (_state <= 0)
-				return _name + ":✔Disabled";
+				return _name + ":✔Infinite";
 			else
-				return _name + ":❓" + string(_state) + "x";
+				return _name + ":❓" + string_format(_state, -1, 1) + "x";
 		    break;
 		case option_type.controller_button:
 
@@ -375,7 +445,54 @@ function get_option_text(option) {
             
             return _name + _str;
 		    break;
+		case option_type.internal_resolution:
+			if (_state <= 0)
+				return _name + ":✔Display Resolution";
+			else {
+				var _prefix;
+				if (_state >= 1)
+					_prefix = ":❓";
+				else
+					_prefix = ":❌";
+				return _name + _prefix + string_format(_state, -1, 1) + "x";
+			}
+			break;
+		case option_type.antialiasing:
+			if (_state <= 0)
+				return _name + ":❌Disabled";
+			else
+				return _name + ":✔" + string(_state) + "x";
+			break;
+		case option_type.anisotropic:
+			if (_state <= 0)
+				return _name + ":❌Off";
+			else
+				return _name + ":✔" + string(_state) + "x";
+			break;
+		case option_type.aspect_ratio:
+			switch (_state) {
+				case 0:
+					return _name + ":✔Auto";
+				case 1:
+					return _name + ":❓Force 4:3";
+				case 2:
+					return _name + ":❓Force 16:9";
+			}
+			break;
+		case option_type.display_mode:
+			var _num = (is_numeric(_state) && _state == _state) ? floor(_state) : 0;
+			if (_num == 0)
+			    return _name + ":✔Native";
+			var _values = get_display_mode_values(_category);
+			var _n = array_length(_values);
+			if (_n <= 0)
+				return _name + ":❓Unavailable";
+			var _idx = clamp(_num, 1, _n);
+			return _name + ":❓" + get_display_mode_label(_values[_idx - 1]);
+			break;
 	}
+
+	return _name + ":❌Unknown";
 }
 
 // Load the values for the item from the currently open ini
@@ -411,7 +528,18 @@ function ini_load_item(_item, _category) {
 		case option_type.draw_distance:
         case option_type.controller_button:
 		case option_type.window_size:
+		case option_type.internal_resolution:
+		case option_type.antialiasing:
+		case option_type.anisotropic:
+		case option_type.aspect_ratio:
 			_item.state = ini_read_real(_category.title, _item.internal_name, 0);
+			break;
+		case option_type.display_mode:
+			var _raw = ini_read_real(_category.title, _item.internal_name, 0);
+			var _num = (is_numeric(_raw) && _raw == _raw) ? floor(_raw) : 0;
+			var _values = get_display_mode_values(_category);
+			var _count = array_length(_values) + 1;
+			_item.state = clamp(_num, 0, max(0, _count - 1));
 			break;
         case option_type.launcher_width:
 			_item.state = ini_read_real(_category.title, _item.internal_name, 1280);
@@ -443,13 +571,11 @@ function ini_save_item(_item, _category) {
 			ini_write_string(_category.title, _item.internal_name, _item.state ? "true" : "false");
 			break;
 		case option_type.uint:
-		case option_type.float:
 		case option_type.key:
 		case option_type.star_message:
 		case option_type.noise_type:
 		case option_type.hud_layout:
 		case option_type.multiplier:
-		case option_type.percentage:
 		case option_type.camera_mode:
 		case option_type.graphics_backend_windows:
 		case option_type.graphics_backend_other:
@@ -464,15 +590,27 @@ function ini_save_item(_item, _category) {
 		case option_type.frame_rate:
 		case option_type.palette:
 		case option_type.fixes:
-		case option_type.draw_distance:
         case option_type.controller_button:
 		case option_type.window_size:
         case option_type.launcher_width:
         case option_type.launcher_height:
+		case option_type.antialiasing:
+		case option_type.anisotropic:
+		case option_type.aspect_ratio:
+			ini_write_string(_category.title, _item.internal_name, string(floor(_item.state)));
+			break;
+		case option_type.display_mode:
+			var _n = (is_numeric(_item.state) && _item.state == _item.state) ? floor(_item.state) : 0;
+			ini_write_string(_category.title, _item.internal_name, string(_n));
+			break;
+		case option_type.float:
+		case option_type.percentage:
+		case option_type.draw_distance:
+		case option_type.internal_resolution:
 			ini_write_real(_category.title, _item.internal_name, _item.state);
 			break;
 		case option_type.mouse_button:
-			ini_write_real(_category.title, _item.internal_name, global.n64_button_values[_item.state]);
+			ini_write_string(_category.title, _item.internal_name, string(floor(global.n64_button_values[_item.state])));
 			break;
 		case option_type.color:
 			ini_write_real(_category.title, _item.internal_name + "_r", color_get_red(_item.state[0]));
@@ -483,7 +621,9 @@ function ini_save_item(_item, _category) {
 }
 
 // Changes the state/value of the option based on movement values
-function change_option_state(_option, _hor_movement, _long_hor_movement) {
+function change_option_state(_option, _hor_movement, _long_hor_movement, launcher_settings = false, _category = undefined) {
+	
+	var _old_state = _option.state;
 	
 	switch (_option.type) {
 		case option_type.uint:
@@ -506,32 +646,33 @@ function change_option_state(_option, _hor_movement, _long_hor_movement) {
 				_option.state = clamp(_keyboard_value, 1, 999);
 			else {
 				_option.state = clamp(_option.state + _hor_movement + wait(4)*_long_hor_movement, 1, 336);
-				while (_hor_movement + _long_hor_movement != 0 && string_copy(get_option_text(_option), string_length(_option.name)+3, 7) == "Unknown") {
+				while (_hor_movement + _long_hor_movement != 0 && string_copy(get_option_text(_option, _category), string_length(_option.name)+3, 7) == "Unknown") {
 					_option.state = clamp(_option.state + _hor_movement + _long_hor_movement, 1, 336);
 				}
 			}
 			break;
+		case option_type.fixes:
 		case option_type.encore_mode:
 		case option_type.blj_everywhere:
 		case option_type.green_demon_mode:
 			_option.state = clamp(_option.state + _hor_movement + wait(4)*_long_hor_movement, 0, 3);
 		break;
 		case option_type.star_message:
-			_option.state = clamp(_option.state + _hor_movement + wait(4)*_long_hor_movement, 0, global.show_hidden ? 3 : 2);
+			_option.state = clamp(_option.state + _hor_movement + wait(4)*_long_hor_movement, 0, 3);
 		break;
 		case option_type.camera_mode:
 		case option_type.noise_type:
 		case option_type.hud_layout:
 		case option_type.lives_mode:
-		case option_type.texture_filtering:
 		case option_type.moon_jump:
 		case option_type.lod:
-		case option_type.fixes:
+		case option_type.aspect_ratio:
 			_option.state = clamp(_option.state + _hor_movement + wait(4)*_long_hor_movement, 0, 2);
+			break;
+		case option_type.texture_filtering:
+			_option.state = clamp(_option.state + _hor_movement + wait(4)*_long_hor_movement, -1, 1);
 			break;
 		case option_type.graphics_backend_windows:
-			_option.state = clamp(_option.state + _hor_movement + wait(4)*_long_hor_movement, 0, 2);
-			break;
 		case option_type.graphics_backend_other:
 			_option.state = 0;
 			break;
@@ -581,7 +722,54 @@ function change_option_state(_option, _hor_movement, _long_hor_movement) {
 			else
 				_option.state = max(_option.state + _hor_movement + _long_hor_movement * 3, MIN_HEIGHT);
 			break;
-	}	
+		case option_type.internal_resolution:
+			var _move = (_hor_movement + wait(4)*_long_hor_movement * 2);
+			_option.state += _move / 2;
+			_option.state = max(0, _option.state);
+			break;
+		case option_type.antialiasing:
+			var _move = (_hor_movement + wait(4)*_long_hor_movement);
+			if (_move > 0) {
+				if (_option.state == 0) _option.state = 2;
+				else if (_option.state == 2) _option.state = 4;
+				else if (_option.state == 4) _option.state = 8;
+			} else if (_move < 0) {
+				if (_option.state == 8) _option.state = 4;
+				else if (_option.state == 4) _option.state = 2;
+				else if (_option.state == 2) _option.state = 0;
+			}
+			break;
+		case option_type.anisotropic:
+			var _move = (_hor_movement + wait(4)*_long_hor_movement);
+			if (_move > 0) {
+				if (_option.state == 0) _option.state = 2;
+				else if (_option.state == 2) _option.state = 4;
+				else if (_option.state == 4) _option.state = 8;
+				else if (_option.state == 8) _option.state = 16;
+			} else if (_move < 0) {
+				if (_option.state == 16) _option.state = 8;
+				else if (_option.state == 8) _option.state = 4;
+				else if (_option.state == 4) _option.state = 2;
+				else if (_option.state == 2) _option.state = 0;
+			}
+			break;
+		case option_type.display_mode:
+			var _move = _hor_movement + wait(4)*_long_hor_movement;
+			if (_move != 0) {
+				var _values = get_display_mode_values(_category);
+				var _count = array_length(_values) + 1;
+				if (_count > 1) {
+					var _cur = (is_numeric(_option.state) && _option.state == _option.state) ? floor(_option.state) : 0;
+					_option.state = clamp(_cur + sign(_move), 0, _count - 1);
+				}
+			}
+			break;
+	}
+
+	if (launcher_settings && _option.state != _old_state) {
+		if (_option.internal_name == "sound_volume") set_sfx_volume(_option.state);
+		if (_option.internal_name == "music_volume") set_music_volume(_option.state);
+	}
 }
 
 enum option_limit {
@@ -592,7 +780,7 @@ enum option_limit {
 }
 
 // Gets the current option limits
-function get_option_limit(_option) {
+function get_option_limit(_option, _category = undefined) {
     
     var _state = _option.state;
 	
@@ -600,6 +788,7 @@ function get_option_limit(_option) {
         
 		case option_type.uint:
         case option_type.draw_distance:
+        case option_type.internal_resolution:
 			return (_state <= 0) ? option_limit.right : option_limit.both;
             
 		case option_type.float:
@@ -625,6 +814,7 @@ function get_option_limit(_option) {
                     return option_limit.both;
 			}
             
+		case option_type.fixes:
 		case option_type.encore_mode:
 		case option_type.blj_everywhere:
 		case option_type.green_demon_mode:
@@ -638,7 +828,7 @@ function get_option_limit(_option) {
 		case option_type.star_message:
             if (_state <= 0)
                 return option_limit.right;
-            else if (_state >= global.show_hidden ? 3 : 2)
+            else if (_state >= 3)
                 return option_limit.left;
             else
                 return option_limit.both;
@@ -647,18 +837,25 @@ function get_option_limit(_option) {
 		case option_type.noise_type:
 		case option_type.hud_layout:
 		case option_type.lives_mode:
-		case option_type.texture_filtering:
 		case option_type.moon_jump:
 		case option_type.lod:
-		case option_type.fixes:
-		case option_type.graphics_backend_windows:
+		case option_type.aspect_ratio:
             if (_state <= 0)
                 return option_limit.right;
             else if (_state >= 2)
                 return option_limit.left;
             else
                 return option_limit.both;
+        
+		case option_type.texture_filtering:
+            if (_state <= -1)
+                return option_limit.right;
+            else if (_state >= 1)
+                return option_limit.left;
+            else
+                return option_limit.both;
                 
+		case option_type.graphics_backend_windows:
 		case option_type.graphics_backend_other:
             return option_limit.none;
             
@@ -714,6 +911,27 @@ function get_option_limit(_option) {
                 return option_limit.right;
             else
                 return option_limit.both;
+		
+		case option_type.antialiasing:
+			if (_state <= 0) return option_limit.right;
+			if (_state >= 8) return option_limit.left;
+			return option_limit.both;
+		
+		case option_type.anisotropic:
+			if (_state <= 1) return option_limit.right;
+			if (_state >= 16) return option_limit.left;
+			return option_limit.both;
+		
+		case option_type.display_mode:
+			var _values = get_display_mode_values(_category);
+			var _count = array_length(_values) + 1;
+			var _idx = (is_numeric(_state) && _state == _state) ? floor(_state) : 0;
+			_idx = clamp(_idx, 0, max(0, _count - 1));
+			if (_idx <= 0)
+				return option_limit.right;
+			if (_idx >= _count - 1)
+				return option_limit.left;
+			return option_limit.both;
                 
         default:
             return option_limit.both;

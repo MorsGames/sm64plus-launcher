@@ -18,3 +18,10 @@ else {
 	if (message_position > 0)
 		message_position -= 0.015625;
 }
+
+if (top_text_delay > 0) {
+    top_text_delay--;
+}
+else if (text_transition_counter < 1) {
+    text_transition_counter = min(1, text_transition_counter + text_transition_speed);
+}

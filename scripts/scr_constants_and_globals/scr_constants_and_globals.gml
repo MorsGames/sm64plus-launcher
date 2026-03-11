@@ -1,24 +1,26 @@
-#macro DEBUG debug_mode
+#macro DEBUG true
 
 #macro ARM false
 
-#macro PATH (DEBUG ? (global.debug_path + @"/") : (program_directory + @"/sm64plus/"))
+#macro PATH (global.debug_path != "" ? (global.debug_path + @"/") : (program_directory + @"/sm64plus/"))
 #macro GFX_PATH (PATH + @"textures/")
 #macro GAME_PATH (PATH + @"build/us_pc/")
 #macro CATEGORIES_PATH (PATH + @"launcher/categories.json")
 #macro LAUNCHER_CATEGORY_PATH (PATH + @"launcher/launcher_settings.json")
 #macro GAME_EXE ((CURRENT_OS == os_windows) ? "sm64.us.exe" : "sm64.us")
 #macro GAME_EXE_OLD ((CURRENT_OS == os_windows) ? "sm64.us.f3dex2e.exe" : "sm64.us.f3dex2e")
-#macro INI_PATH (working_directory + @"settings.ini")
-#macro INI2_PATH (working_directory + @"launcher_settings.ini")
-#macro INI3_PATH (working_directory + @"launcher_config.ini")
-#macro PRESETS_PATH (working_directory + @"presets/")
+#macro INI_PATH (game_save_id + @"settings.ini")
+#macro INI2_PATH (game_save_id + @"launcher_settings.ini")
+#macro INI3_PATH (game_save_id + @"launcher_config.ini")
+#macro PRESETS_PATH (game_save_id + @"presets/")
 #macro INTERNAL_PRESETS_PATH PATH + (@"launcher/presets/")
-#macro EXTERNAL_PATH (working_directory + @"gfx")
+#macro INPUT_PRESETS_PATH (game_save_id + @"input_presets/")
+#macro INTERNAL_INPUT_PRESETS_PATH PATH + (@"launcher/input_presets/")
+#macro EXTERNAL_PATH (game_save_id + @"gfx")
 #macro EXTERNAL_PATH_ORIGINAL (PATH + @"build/us_pc/gfx")
 #macro VERSION_FILE_PATH (PATH + @"VERSION")
 
-#macro VERSION "v3.0.0"
+#macro VERSION "v4.0.0"
 
 #macro MIN_WIDTH 512
 #macro MIN_HEIGHT 240
@@ -38,26 +40,33 @@
 
 #macro CURRENT_OS os_type
 
+enum settings_section {
+	system,
+	game_config,
+	input_mapping
+}
+
 // Not sure if these are right lol
 #macro SONG_BPM 130
 #macro BPM_IN_MS (60000/SONG_BPM)
 
 global.font = font_add_sprite(spr_font, ord(" "), false, 1);
-global.show_hidden = false;
 
 // Debug/Development mode
-if (DEBUG) {
-	
-	var _file = file_text_open_read(game_save_id + "path.txt");
-		 
-	if (_file == -1) {
-		show_message("Please create a file in your working directory (\"%LOCALAPPDATA%\\SM64Plus\") called \"path.txt\" and put the path to the game's repository there.");
-		game_end();
-	}
-	else {
-		global.debug_path = file_text_read_string(_file);
-		file_text_close(_file);
-	}
+var _file = file_text_open_read(game_save_id + "path.txt");
+    
+if (_file == -1) {
+    if (DEBUG) {
+        show_message("Please create a file in your working directory (\"%LOCALAPPDATA%\\SM64Plus\") called \"path.txt\" and put the path to the game's repository there.");
+        game_end();
+    }
+    else {
+        global.debug_path = "";
+    }
+}
+else {
+    global.debug_path = file_text_read_string(_file);
+    file_text_close(_file);
 }
 
 // Forgot why I needed to set these here

@@ -3,24 +3,28 @@
 function sfx_play(sound) {
 	
 	// Ignore if the game is muted
-	if (global.mute_sounds)
+	if (global.sfx_volume <= 0)
 		exit;
 		
 	// Always only play a single instance of the sound effects
 	audio_stop_sound(sound)
-	audio_play_sound(sound, 0, 0)
+	var _snd = audio_play_sound(sound, 0, 0)
+	audio_sound_gain(_snd, global.sfx_volume, 0)
 }
 
 /// Plays music.
 function music_play(music) {
 	
 	// Ignore if the game is muted
-	if (global.mute_music)
+	if (global.music_volume <= 0)
 		exit;
 		
 	// Don't play if it's already playing
-	if (!audio_is_playing(music))
-		audio_play_sound(music, 0, 1)
+	if (!audio_is_playing(music)) {
+		global.music_instance = audio_play_sound(music, 0, 1)
+	}
+	
+	audio_sound_gain(global.music_instance, global.music_volume, 0)
 }
 
 // FUCK THIS SHIT!!!!!!!

@@ -106,7 +106,7 @@ function draw_letters(_x, _y, str, scale) {
 // Draw an option with support for different colors per characters
 function draw_option(_x, _y, str, scale, enabled = true) {
     
-    _y += scale * 3;
+    //_y += scale * 3;
     
     var _length = string_length(str);
 	var _color = c_white;
@@ -151,7 +151,7 @@ function draw_option(_x, _y, str, scale, enabled = true) {
 // Just draw a text
 function draw_text_custom(_x, _y, str, scale) {
 
-    _y += scale * 3;
+    //_y += scale * 3;
     
 	draw_set_color(COLOR_BLACK)
 	draw_text_ext_transformed(_x+scale, _y+scale, str, 12, room_width/scale-32, scale, scale, 0)
@@ -161,7 +161,7 @@ function draw_text_custom(_x, _y, str, scale) {
 
 function draw_text_custom_inverted(_x, _y, str, scale) {
 
-    _y += scale * 3;
+    //_y += scale * 3;
 
 	draw_set_color(c_white)
 	draw_text_ext_transformed(_x+scale, _y+scale, str, 12, room_width/scale-32, scale, scale, 0)

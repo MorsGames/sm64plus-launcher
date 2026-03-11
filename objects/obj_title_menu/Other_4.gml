@@ -13,13 +13,6 @@ file_text_close(_file);
 
 // Load the settings
 
-// Show hidden settings
-global.show_hidden = input_check(key.del);
-
-if (global.show_hidden) {
-	obj_background.display_message("Enabled the hidden categories.")
-}
-
 // Delete the categories that shouldn't be seen
 delete_categories();
 

@@ -4,13 +4,21 @@ event_inherited();
 
 scale = -0.25
 
+// Press any key state
+press_any_key_mode = true;
+transition_counter = 0;
+transition_speed = 0.02;
+
 // The options
 options = ["Start Game", "Settings", "Update", "Quit"];
 options2 = ["Update Launcher", "Pull & Rebuild", "Pull, Clean & Rebuild", "Back"];
+options3 = ["Yes", "No"];
+options4 = ["System Settings", "Game Config", "Input Mapping", "Back"];
 
 page = 0;
 
 box_size = 96;
+box_height = 96;
 
 run_game = function() {
 	sfx_play(snd_start);
@@ -22,7 +30,7 @@ run_game = function() {
 music_play(snd_music)
 	
 bop = function() {
-	if (!global.mute_music)
+	if (global.music_volume > 0)
 		scale = 0.5;	
 }
 

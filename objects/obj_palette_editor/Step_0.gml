@@ -36,14 +36,14 @@ else {
 		}
 	}
 	
-	if (input_check_pressed(key.del2)) {
+	if (input_check_pressed(input.del2)) {
 		reset_color();
 		shake = 32;
 		sfx_play(snd_denied);
 		obj_background.display_message("Loaded the default color.")
 	}
 
-	if (input_check_pressed(key.select)) {
+	if (input_check_pressed(input.select)) {
 		if (string_length(color_string) < 6) {
 			shake = 8;
 			sfx_play(snd_denied);
@@ -53,7 +53,7 @@ else {
 			sfx_play(snd_select)
 		}
 	}
-	if (input_check_pressed(key.back)) {
+	if (input_check_pressed(input.back)) {
 		slide_out = true;
 		save = false;
 		sfx_play(snd_cancel)
